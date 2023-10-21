@@ -5,7 +5,7 @@ import Register from './page/Register'
 import Home from './page/Home'
 import AdminHome from './page/admin/Home'
 import Department from './page/admin/Department'
-import User from './page/admin/user'
+import User from './page/admin/User'
 function App() {
 
   return (
