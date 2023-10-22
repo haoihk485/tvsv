@@ -14,7 +14,7 @@ const AdminNav = ({ avatarUrl }) => {
             <div className='bg-[#2CC168] p-2 flex items-center justify-between'>
                 <Bars3Icon className='h-6 w-6 mx-1 cursor-pointer' onClick={showSideBar}></Bars3Icon>
                 <div className=" flex items-center mx-1 bg-blue-200 px-2 py-[2px] rounded-full cursor-pointer">
-                    <img src={avatarUrl} alt="" className='h-9 w-9 rounded-full' />
+                    <img src={avatarUrl} alt="" className='h-7 w-7 m-1 rounded-full' />
                     <img src={downArrow} alt="" className='' />
                 </div>
             </div>
