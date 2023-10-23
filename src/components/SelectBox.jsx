@@ -4,10 +4,14 @@ import { ChevronDownIcon } from '@heroicons/react/24/solid'
 const SelectBox = (props) => {
     const [isOpen, setIsOpen] = useState(false)
     return (
-        <div className="relative w-[70%]">
+        <div className="relative w-[60%]">
             <div className="">
                 <div className="bg-white py-2 pl-2 rounded-xl border w-full cursor-pointer flex flex-row justify-between" onClick={() => {
                     {
+                        if(props.disabled === true){
+                            setIsOpen(false)
+                            return
+                        }
                         setIsOpen(!isOpen)
                     }
                 }}>
@@ -26,7 +30,6 @@ const SelectBox = (props) => {
                     })}
                 </ul>
             </div>
-
         </div>
     )
 }

@@ -1,17 +1,22 @@
+import { useState } from "react"
+
 import AdminNav from "../../components/AdminNav"
 import { getCookie } from "../../utils/cookie"
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import AddUserModal from "../../components/modal/AddUserModal"
-import { useState } from "react"
+import blankAvt from "../../assets/img/blankAvt.png"
+
 
 const User = () => {
     const [showAddUserModal, setShowAddUserModal] = useState(false)
+    const avatarUrl = getCookie('avatarUrl')
     
 
     return (
         <div>
             <AddUserModal show={showAddUserModal} cb={()=>{setShowAddUserModal(false)}}></AddUserModal>
-            <AdminNav avatarUrl={getCookie('avatarUrl')}></AdminNav>
+            <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
+
             <div className="p-12">
                 <h1 className="font-bold text-3xl">Người Dùng</h1>
                 <div>

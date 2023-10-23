@@ -10,7 +10,7 @@ const AdminNav = ({ avatarUrl }) => {
         setIsShow(!isShow)
     }
     return (
-        <div>
+        <div className='z-10 relative'>
             <div className='bg-[#2CC168] p-2 flex items-center justify-between'>
                 <Bars3Icon className='h-6 w-6 mx-1 cursor-pointer' onClick={showSideBar}></Bars3Icon>
                 <div className=" flex items-center mx-1 bg-blue-200 px-2 py-[2px] rounded-full cursor-pointer">
@@ -24,9 +24,9 @@ const AdminNav = ({ avatarUrl }) => {
                         <div className='text-[#898989] font-bold text-3xl my-5 cursor-pointer' onClick={()=>{navigate('/admin')}}>ADMIN</div>
                         <div className='border-t-2 border-gray-300 flex flex-col items-center w-full'>
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%] mt-5'
-                                onClick={() => { navigate('/admin/department') }}>Quản lý phòng ban</button>
+                                onClick={() => { navigate('/admin/departments') }}>Quản lý phòng ban</button>
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
-                                onClick={() => { navigate('/admin/user') }}>Quản lý người dùng</button>
+                                onClick={() => { navigate('/admin/users') }}>Quản lý người dùng</button>
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
                                 onClick={() => { navigate('/admin/field') }}>Quản lý phòng ban</button>
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'

@@ -1,24 +1,6 @@
 import axios from "axios"
 import { getCookie } from "./cookie"
-
-// export async function register(fullName, email, phone, password, occupation) {
-//     const data = {
-//         fullName,
-//         email,
-//         phone,
-//         password,
-//         occupation
-//     }
-//     const option = {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(data)
-//     }
-//     const respond = await fetch('https://student-consulting.onrender.com/api/auth/register', option)
-//     return respond.json()
-// }
+import { info } from "autoprefixer"
 
 
 export function register(fullName, email, phone, password, occupation) {
@@ -44,22 +26,6 @@ export function register(fullName, email, phone, password, occupation) {
 }
 
 
-// export async function login(phone, password) {
-//     const data = {
-//         "userName": phone,
-//         password
-//     }
-//     console.log(data)
-//     const option = {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(data)
-//     }
-//     const respond = await fetch('https://student-consulting.onrender.com/api/auth/login', option)
-//     return respond.json()
-// }
 export function login(phone, password) {
     const data = {
         "username": phone,
@@ -80,20 +46,6 @@ export function login(phone, password) {
         .catch(error => console.log(error))
 }
 
-// export async function logout() {
-//     const data = {}
-//     const option = {
-//         method: "POST",
-//         mode: 'no-cors',
-//         credentials: 'include',
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(data)
-//     }
-//     const respond = await fetch('https://student-consulting.onrender.com/api/auth/logout', option)
-//     return respond.json()
-// }
 export function logout() {
     const option = {
         method: "POST",
@@ -108,13 +60,13 @@ export function logout() {
         .then(info => info)
         .catch(error => console.log(error))
 }
-export function refreshToken () {
+export function refreshToken() {
     const option = {
         method: "POST",
         credentials: "include",
         headers: {
             "Content-Type": "application/json",
-            'Authorization':`${getCookie('accessToken')}`,
+            'Authorization': `Bearer ${getCookie('accessToken')}`,
         },
     }
     const url = 'https://student-consulting.onrender.com/api/auth/refresh-token'
@@ -124,10 +76,10 @@ export function refreshToken () {
         .catch(error => console.log(error))
 }
 
-export function addDepartment (name, description, token) {
+export function addDepartment(name, description, token) {
     console.log(token)
     const data = {
-        name, 
+        name,
         description
     }
     console.log(data);
@@ -146,19 +98,49 @@ export function addDepartment (name, description, token) {
         .catch(error => console.log(error))
 }
 
-// export const addDepHandle = async () => {
-//     // if (isLoading) { return; }
-//     setIsLoading(true);
-//     try {
-//         if (depName !== '') {
-//             const response = await addDepartment(depName, desc, accessToken);
-//             if (response.data.success === true) { // Điều này phụ thuộc vào cấu trúc của đối tượng phản hồi Axios.
-//                 alert(response.data.message); // Điều này phụ thuộc vào cấu trúc của đối tượng phản hồi Axios.
-//                 setDepName('');
-//                 setDesc('');
-//             }
-//         }
-//     } catch (error) {
-//         console.error(error); // Xử lý lỗi
-//     }
-// }
+export function getDeparments(page, search) {
+    const token = getCookie('accessToken')
+    const searchKey = search ? `value=${search}&` : ''
+    const option = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+    const url = `https://student-consulting.onrender.com/api/departments?${searchKey}size=3&page=${page}`
+    return fetch(url, option)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+}
+
+export function getDeparmentDetailById(id) {
+    const option = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+    const url = `https://student-consulting.onrender.com/api/departments/${id}`
+    return fetch(url, option)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+}
+
+export function uploadImage(formData, id){
+    const options = {
+        method: "POST",
+        body: formData,
+        headers: {
+            "Content-Type": "multipart/form-data",
+            'Authorization': `Bearer ${getCookie('accessToken')}`
+        },
+    };
+    const url = `https://student-consulting.onrender.com/uploads/images/${id}`;
+    return fetch(url, options)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+}
+

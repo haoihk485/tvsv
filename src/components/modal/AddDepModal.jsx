@@ -18,13 +18,14 @@ const AddDepModal = ({ show, cb }) => {
     }, [cb]);
 
     const addDepHandle = async () => {
-        // if (isLoading) { return; }
+        if (isLoading) { return; }
         setIsLoading(true);
         try {
             if (depName !== '') {
                 const response = await addDepartment(depName, desc, accessToken);
-                if (response.data.success === true) { // Điều này phụ thuộc vào cấu trúc của đối tượng phản hồi Axios.
-                    alert(response.data.message); // Điều này phụ thuộc vào cấu trúc của đối tượng phản hồi Axios.
+                console.log(response)
+                if (response.data.success === true) {
+                    alert(response.data.message);
                     setDepName('');
                     setDesc('');
                 }
@@ -32,10 +33,13 @@ const AddDepModal = ({ show, cb }) => {
         } catch (error) {
             console.error(error); // Xử lý lỗi
         }
+        finally{
+            setIsLoading(false)
+        }
     }
 
     return (
-        <div className={`fixed top-0 bottom-0 right-0 left-0 bg-gray-500/30 border ${show ? "" : "hidden"}`}>
+        <div className={`fixed top-0 bottom-0 right-0 left-0 bg-gray-500/30 border ${show ? "" : "hidden"} z-20`}>
             <div className="flex justify-center h-full items-center ">
                 <div className="bg-white rounded-md overflow-hidden p-1 flex-col justify-center items-center flex min-w-[350px]">
                     <div className="bg-gray-300 w-full flex justify-end">

@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom'
 import validator from "validator"
 
 
-import sideImage from '../assets/img/schoolView.png'
-import logo from '../assets/img/logo.png'
+
 import MyInput from "../components/MyInPut"
 import Alert from "../components/Alert";
 import AlertMessage from "../components/AlertMessage"
 import * as request from "../utils/request.jsx"
 import avt from "../assets/img/blankAvt.png"
+import sideImage from '../assets/img/schoolView.png'
+import logo from '../assets/img/logo.png'
 
 
 
