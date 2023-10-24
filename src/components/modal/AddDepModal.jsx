@@ -1,9 +1,8 @@
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { useCallback, useState } from 'react'
-import { addDepartment } from '../../utils/request'
+import { addDepartment, refreshToken } from '../../utils/request'
 import { getCookie } from '../../utils/cookie'
-import axios from 'axios'
 
 import MyInput from '../MyInPut'
 
@@ -21,6 +20,7 @@ const AddDepModal = ({ show, cb }) => {
         if (isLoading) { return; }
         setIsLoading(true);
         try {
+            refreshToken()
             if (depName !== '') {
                 const response = await addDepartment(depName, desc, accessToken);
                 console.log(response)

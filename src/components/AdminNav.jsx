@@ -9,6 +9,23 @@ const AdminNav = ({ avatarUrl }) => {
     const showSideBar = () => {
         setIsShow(!isShow)
     }
+    const logoutHandle = async () => {
+        if (isLoading) { return; }
+        setIsLoading(true);
+
+        try {
+            const response = await logout()
+            if (response.success) {
+                deleteAllCookies();
+                navigate('/login')
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
+        finally{
+            setIsLoading(false)
+        }
+    }
     return (
         <div className='z-10 relative'>
             <div className='bg-[#2CC168] p-2 flex items-center justify-between'>
@@ -30,7 +47,7 @@ const AdminNav = ({ avatarUrl }) => {
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
                                 onClick={() => { navigate('/admin/field') }}>Quản lý phòng ban</button>
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
-                                onClick={() => { navigate('/admin/field') }}>Quản lý phòng ban</button>
+                                onClick={() => { logoutHandle }}>Đăng xuất</button>
                         </div>
                     </div>
                 </div>

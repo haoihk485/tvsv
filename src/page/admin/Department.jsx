@@ -12,6 +12,9 @@ import AddDepModal from "../../components/modal/AddDepModal"
 import blankAvt from "../../assets/img/blankAvt.png"
 import { getDeparments } from "../../utils/request"
 import DepDetailModal from "../../components/modal/DepDetailModal"
+import { foward } from "../../utils/route"
+
+
 const Department = () => {
     const [showAddDepModal, setShowAddDepModal] = useState(false)
     const [showDetailDepModal, setShowDetailDepModal] = useState(false)
@@ -102,12 +105,12 @@ const Department = () => {
                         <tbody className="border border-blue-gray-700">
                             {
                                 tableData.map((dep, i) => (
-                                    <tr key={i} className={`${(i % 2 === 0) ? "" : "bg-gray-200"}`}>
+                                    <tr key={i} className={`${(i % 2 === 0) ? "" : "bg-gray-200"} h-[40px]`}>
                                         <td className="border-r text-center">{i + 1}</td>
                                         <td className="border-r ">{dep.name}</td>
                                         <td className="border-r ">{dep.description}</td>
                                         <td className='border-r text-center'>{dep.status ? "Hoạt động" : "Dừng hoạt động"}</td>
-                                        <td className=" flex items-center justify-center"><PencilSquareIcon className="w-6 h-6 cursor-pointer" 
+                                        <td className="flex content-center justify-center min-h-full"><PencilSquareIcon className="w-6 h-6 cursor-pointer" 
                                             onClick={()=>{
                                                 setId(dep.id)
                                                 setShowDetailDepModal(true)

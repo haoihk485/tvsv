@@ -5,9 +5,11 @@ import { getCookie } from "../../utils/cookie"
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import AddUserModal from "../../components/modal/AddUserModal"
 import blankAvt from "../../assets/img/blankAvt.png"
+import { foward } from "../../utils/route"
 
 
 const User = () => {
+    foward('ROLE_ADMIN')
     const [showAddUserModal, setShowAddUserModal] = useState(false)
     const avatarUrl = getCookie('avatarUrl')
     

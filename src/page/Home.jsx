@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 import QuestionBox from '../components/QuestionBox'
 import TextEditorModal from '../components/modal/TextEditorModal'
 import { getCookie } from '../utils/cookie.jsx'
+import { foward } from '../utils/route'
 
 
 const Home = () => {

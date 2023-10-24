@@ -1,31 +1,29 @@
 import { useState, useCallback, useEffect } from 'react'
 import { XMarkIcon, PlusCircleIcon, PencilIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid'
 
-import SelectBox from '../SelectBox'
-import { getDeparmentDetailById } from '../../utils/request'
 import blankAvt from '../../assets/img/blankAvt.png'
-import {uploadImage} from '../../utils/request'
+import { uploadImage, uploadImageAxios, updateDepartment,
+    getDeparmentDetailById, refreshToken } from '../../utils/request'
 
 
 
-const DepDetailModal = ({ cb, id, show}) => {
-    const d = ['Hoạt động', 'Dừng hoạt động']
+const DepDetailModal = ({ cb, id, show }) => {
     const [editing, setEditing] = useState(false)
-    const [data, setData] = useState({})
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [image, setImage] = useState(null)
     const [logo, setLogo] = useState(blankAvt)
+    const [blobId, setBlobId] = useState('')
 
     useEffect(() => {
-        if(id === '') return
+        if (id === '') return
         getDeparmentDetailById(id)
             .then(fetchData => {
                 console.log(fetchData);
                 if (fetchData.success === true) {
                     setName(fetchData.data.name)
                     setDescription(fetchData.data.description)
-                    fetchData.data.logo?setLogo(fetchData.data.logo):setLogo(blankAvt)
+                    fetchData.data.logo ? setLogo(fetchData.data.logo) : setLogo(blankAvt)
                 }
             })
     }, [id])
@@ -39,11 +37,25 @@ const DepDetailModal = ({ cb, id, show}) => {
         setImage(e.target.files[0]);
     }
 
-    const handleUpload = async() =>{
+    const handleUdate = async () => {
+        refreshToken()
         const formData = new FormData();
         formData.append('image', image, image.name)
-        const response = await uploadImage(formData, id)
-        console.log(response)
+        const { success, data } = await uploadImageAxios(formData, id)
+        console.log(data.data.blobId)
+        success ? setImage(null) : setImage(image)
+        try {
+            const response = await updateDepartment(id, name, description, data.data.blobId, data.data.url)
+            if (response.success) {
+                console.log(response)
+                alert(response.message)
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
+        finally {
+            setEditing(false)
+        }
     }
 
     return (
@@ -58,8 +70,7 @@ const DepDetailModal = ({ cb, id, show}) => {
                         <h1 className='text-center text-lg m-1 text-blue-500'>Phòng Ban</h1>
                         <div className='flex justify-center items-center border-2'>
                             <img src={logo} className='w-14 h-14' ></img>
-                            <input type="file" className='ml-5' accept="image/png, image/jpeg" onChange={handleImageChange} />
-                            <button className='bg-blue-400 p-1 mx-1 rounded-lg text-white'onClick={handleUpload}>Tải lên</button>
+                            <input type="file" className='ml-5' accept="image/png, image/jpeg" onChange={handleImageChange} disabled={!editing} />
                         </div>
                         <div className='flex justify-between items-center mt-2'>
                             <label htmlFor="depName">Id phòng ban:</label>
@@ -67,24 +78,20 @@ const DepDetailModal = ({ cb, id, show}) => {
                         </div>
                         <div className='flex justify-between items-center mt-2'>
                             <label htmlFor="desc">Tên phòng ban</label>
-                            <input type="text" className='border-b border-black outline-none pl-1 disabled:text-gray-500' disabled={!editing} value={name} onChange={(e)=>setName(e.target.value)}/>
+                            <input type="text" className='border-b border-black outline-none pl-1 disabled:text-gray-500' disabled={!editing} value={name} onChange={(e) => setName(e.target.value)} />
                         </div>
                         <div className='flex justify-between items-center mt-2'>
                             <label htmlFor="desc">Miêu tả:</label>
-                            <input type="text" className='border-b border-black outline-none pl-1 disabled:text-gray-500' disabled={!editing} value={description} onChange={(e)=>setDescription(e.target.value)}/>
-                        </div>
-                        <div className='flex justify-between items-center mt-2'>
-                            <label htmlFor="desc">Trạng thái</label>
-                            <SelectBox data={d} disabled={!editing}></SelectBox>
+                            <input type="text" className='border-b border-black outline-none pl-1 disabled:text-gray-500' disabled={!editing} value={description} onChange={(e) => setDescription(e.target.value)} />
                         </div>
 
                     </div>
-                    <button className={`bg-[#2CC168] rounded-full p-2 m-1 text-white ${editing ? 'hidden' : ''} mt-3`}
+                    <button className={`bg-[#2CC168] rounded-full p-2 m-1 text-white ${editing ? 'hidden' : ''} mt-5`}
                         onClick={() => { setEditing(!editing); console.log(id); }}>
                         <PencilIcon className='h-4 w-4 text-white inline-block'></PencilIcon>Chỉnh sửa</button>
-                    <div className={`flex justify-around w-full ${editing ? '' : 'hidden'} mt-3`}>
+                    <div className={`flex justify-around w-full ${editing ? '' : 'hidden'} mt-5`}>
                         <button className={`bg-[#2CC168] rounded-full p-2 m-1 text-white `}
-                            onClick={() => setEditing(!editing)}>
+                            onClick={handleUdate}>
                             <PencilIcon className='h-4 w-4 text-white inline-block'></PencilIcon>Xác nhận</button>
                         <button className={`bg-red-400 rounded-full p-2 m-1 text-white min-w-[100px]`}
                             onClick={() => setEditing(!editing)}>

@@ -62,11 +62,12 @@ const Login = () => {
                 if (response.success) {
                     document.cookie = `accessToken=${response.data.token}`
                     document.cookie = `fullName=${response.data.name}`
+                    document.cookie = `role=${response.data.role}`
                     if (response.data.avatar !== null)
                         document.cookie = `avatarUrl=${response.data.avatar}`
                     else
                         document.cookie = `avatarUrl=${avt}`
-                    document.cookie = `role=&${response.data.role}`
+                    document.cookie = `role=${response.data.role}`
                     if (response.data.role !== 'ROLE_USER') {
                         navigate('/admin')
                     } else { navigate('/') }

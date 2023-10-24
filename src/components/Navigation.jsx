@@ -17,20 +17,17 @@ const Navigation = () => {
         setIsLoading(true);
 
         try {
-            deleteAllCookies();
-            navigate('/login')
-            const response = await refreshToken()
-            console.log('isRefresh')
-            console.log(response)
+            const response = await logout()
             if (response.success) {
-
+                deleteAllCookies();
+                navigate('/login')
             }
         } catch (error) {
-
+            console.log(error.message)
         }
-        // const respond = await request.logout()
-        // if (respond.success === true){
-
+        finally{
+            setIsLoading(false)
+        }
     }
 
     return (

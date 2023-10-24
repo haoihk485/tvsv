@@ -1,6 +1,7 @@
 import axios from "axios"
 import { getCookie } from "./cookie"
 import { info } from "autoprefixer"
+import {isAccessTokenAlive} from "./jwt"
 
 
 export function register(fullName, email, phone, password, occupation) {
@@ -61,18 +62,25 @@ export function logout() {
         .catch(error => console.log(error))
 }
 export function refreshToken() {
+    if(isAccessTokenAlive(getCookie('accessToken'))) return
     const option = {
         method: "POST",
         credentials: "include",
         headers: {
             "Content-Type": "application/json",
-            'Authorization': `Bearer ${getCookie('accessToken')}`,
         },
     }
     const url = 'https://student-consulting.onrender.com/api/auth/refresh-token'
     return fetch(url, option)
         .then(response => response.json())
-        .then(info => info)
+        .then(info => {
+            console.log(info)
+            console.log(document.cookie)
+            document.cookie = `accessToken=${info.data.token}`
+            document.cookie = `fullName=${info.data.name}`
+            document.cookie = `role=${info.data.role}`
+            console.log(document.cookie)
+        })
         .catch(error => console.log(error))
 }
 
@@ -139,6 +147,39 @@ export function uploadImage(formData, id){
     };
     const url = `https://student-consulting.onrender.com/uploads/images/${id}`;
     return fetch(url, options)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+}
+
+export function uploadImageAxios (formData, id, config){
+    try {
+        const url = `https://student-consulting.onrender.com/uploads/images/${id}`;
+        const config = {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              'Authorization': `Bearer ${getCookie('accessToken')}`
+            },}
+        return axios.post(url, formData, config)
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+export function updateDepartment (id, name, description, blobId, url){
+    const data = {
+        name, description, blobId, url
+    }
+    const options = {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${getCookie('accessToken')}`
+        }
+    };
+    const uri = `https://student-consulting.onrender.com/api/admin/departments/${id}`
+    return fetch(uri, options)
         .then(response => response.json())
         .then(info => info)
         .catch(error => console.log(error))
