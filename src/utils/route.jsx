@@ -1,26 +1,30 @@
-import { useNavigate } from "react-router-dom"
-import { getCookie } from "./cookie"
+import { useNavigate } from "react-router-dom";
+import { getCookie } from "./cookie";
 
-const navigate = useNavigate()
 
-export function foward(role){
-    if(role === getCookie('role')){
-        return
-    }
-    else if(role === 'ROLE_USER'){
+// Ánh xạ các vai trò sang các URL tương ứng
+
+
+export function forward(role) {
+    const navigate = useNavigate();
+    if (getCookie('role') === null){
         navigate('/')
     }
-    else if(role === 'ROLE_ADMIN'){
-        navigate('/admin')
+    const roleToURL = {
+        ROLE_USER: '/',
+        ROLE_ADMIN: '/admin',
+        ROLE_SUPERVISOR: '/supervisor',
+        ROLE_COUNSELLOR: '/counsellor',
+        ROLE_DEPARTMENT_HEAD: '/department-head',
+    };
+    const userRole = getCookie('role');
+    // Kiểm tra nếu người dùng có vai trò hợp lệ
+    if (roleToURL[role]) {
+        if (role === userRole) {
+            return;
+        }
+        navigate(roleToURL[role]);
+    } else {
+        console.error('Vai trò không hợp lệ:', role);
     }
-    else if(role === 'ROLE_SUPERVISOR'){}
-    else if(role === 'ROLE_COUNSELLOR'){}
-    else if(role === 'ROLE_DEPARTMENT_HEAD'){}
 }
-
-
-
-
-
-
-

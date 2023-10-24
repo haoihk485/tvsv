@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { forwardRef, useEffect, useState } from "react"
 import {
     PlusCircleIcon, PencilSquareIcon, ArrowDownIcon,
     MagnifyingGlassIcon, ChevronRightIcon, ChevronLeftIcon,
@@ -12,10 +12,11 @@ import AddDepModal from "../../components/modal/AddDepModal"
 import blankAvt from "../../assets/img/blankAvt.png"
 import { getDeparments } from "../../utils/request"
 import DepDetailModal from "../../components/modal/DepDetailModal"
-import { foward } from "../../utils/route"
+import { forward } from "../../utils/route"
 
 
 const Department = () => {
+    forward('ROLE_ADMIN')
     const [showAddDepModal, setShowAddDepModal] = useState(false)
     const [showDetailDepModal, setShowDetailDepModal] = useState(false)
     const [isLoading, setIsLoading] = useState(false)

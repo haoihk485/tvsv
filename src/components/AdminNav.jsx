@@ -2,6 +2,7 @@ import { ChevronDownIcon, Bars3Icon } from '@heroicons/react/24/solid'
 import downArrow from '../assets/svg/arrow_drop_down.svg'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getCookie } from '../utils/cookie'
 
 const AdminNav = ({ avatarUrl }) => {
     const [isShow, setIsShow] = useState(false)
@@ -45,7 +46,7 @@ const AdminNav = ({ avatarUrl }) => {
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
                                 onClick={() => { navigate('/admin/users') }}>Quản lý người dùng</button>
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
-                                onClick={() => { navigate('/admin/field') }}>Quản lý phòng ban</button>
+                                onClick={()=>{console.log(getCookie('role')) }}>Role</button>
                             <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
                                 onClick={() => { logoutHandle }}>Đăng xuất</button>
                         </div>
