@@ -8,7 +8,7 @@ import { getCookie } from "./cookie";
 export function forward(role) {
     const navigate = useNavigate();
     if (getCookie('role') === null){
-        navigate('/')
+        return navigate('/')
     }
     const roleToURL = {
         ROLE_USER: '/',
@@ -18,12 +18,11 @@ export function forward(role) {
         ROLE_DEPARTMENT_HEAD: '/department-head',
     };
     const userRole = getCookie('role');
-    // Kiểm tra nếu người dùng có vai trò hợp lệ
     if (roleToURL[role]) {
         if (role === userRole) {
             return;
         }
-        navigate(roleToURL[role]);
+        return navigate(roleToURL[role]);
     } else {
         console.error('Vai trò không hợp lệ:', role);
     }

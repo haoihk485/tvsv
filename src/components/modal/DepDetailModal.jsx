@@ -1,19 +1,17 @@
 import { useState, useCallback, useEffect } from 'react'
-import { XMarkIcon, PlusCircleIcon, PencilIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid'
+import { XMarkIcon, PencilIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid'
 
-import blankAvt from '../../assets/img/blankAvt.png'
-import { uploadImage, uploadImageAxios, updateDepartment,
-    getDeparmentDetailById, refreshToken } from '../../utils/request'
+import {
+    updateDepartment,
+    getDeparmentDetailById, refreshToken, getDeparments
+} from '../../utils/request'
 
 
 
-const DepDetailModal = ({ cb, id, show }) => {
+const DepDetailModal = ({ cb, id, show, dataChange, page }) => {
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [image, setImage] = useState(null)
-    const [logo, setLogo] = useState(blankAvt)
-    const [blobId, setBlobId] = useState('')
 
     useEffect(() => {
         if (id === '') return
@@ -23,7 +21,6 @@ const DepDetailModal = ({ cb, id, show }) => {
                 if (fetchData.success === true) {
                     setName(fetchData.data.name)
                     setDescription(fetchData.data.description)
-                    fetchData.data.logo ? setLogo(fetchData.data.logo) : setLogo(blankAvt)
                 }
             })
     }, [id])
@@ -33,22 +30,17 @@ const DepDetailModal = ({ cb, id, show }) => {
         cb();
     }, [cb]);
 
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-    }
 
     const handleUdate = async () => {
         refreshToken()
-        const formData = new FormData();
-        formData.append('image', image, image.name)
-        const { success, data } = await uploadImageAxios(formData, id)
-        console.log(data.data.blobId)
-        success ? setImage(null) : setImage(image)
         try {
-            const response = await updateDepartment(id, name, description, data.data.blobId, data.data.url)
+            const response = await updateDepartment(id, name, description)
             if (response.success) {
-                console.log(response)
                 alert(response.message)
+                const response2 = await getDeparments(page)
+                if (response2.success) {
+                    dataChange(response2.data.items)
+                }
             }
         } catch (error) {
             console.log(error.message)
@@ -68,16 +60,16 @@ const DepDetailModal = ({ cb, id, show }) => {
                     </div>
                     <div className='w-full flex flex-col'>
                         <h1 className='text-center text-lg m-1 text-blue-500'>Phòng Ban</h1>
-                        <div className='flex justify-center items-center border-2'>
+                        {/* <div className='flex justify-center items-center border-2'>
                             <img src={logo} className='w-14 h-14' ></img>
                             <input type="file" className='ml-5' accept="image/png, image/jpeg" onChange={handleImageChange} disabled={!editing} />
-                        </div>
+                        </div> */}
                         <div className='flex justify-between items-center mt-2'>
-                            <label htmlFor="depName">Id phòng ban:</label>
+                            <label htmlFor="depName">Id:</label>
                             <h1 className='text-gray-500 border-b border-black'>{id}</h1>
                         </div>
                         <div className='flex justify-between items-center mt-2'>
-                            <label htmlFor="desc">Tên phòng ban</label>
+                            <label htmlFor="name">Tên phòng ban</label>
                             <input type="text" className='border-b border-black outline-none pl-1 disabled:text-gray-500' disabled={!editing} value={name} onChange={(e) => setName(e.target.value)} />
                         </div>
                         <div className='flex justify-between items-center mt-2'>

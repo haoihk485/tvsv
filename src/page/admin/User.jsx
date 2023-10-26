@@ -9,14 +9,41 @@ import { forward } from "../../utils/route"
 
 
 const User = () => {
-    forward('ROLE_ADMIN')
+    // Chuyển trang nếu không phải admin
+    const navigate = useNavigate()
+    const userRole = getCookie('role');
+    const role = 'ROLE_ADMIN'
+
+    useEffect(() => {
+        if (!userRole) {
+            console.log('worked');
+            return navigate('/')
+        }
+        const roleToURL = {
+            ROLE_USER: '/',
+            ROLE_ADMIN: '/admin',
+            ROLE_SUPERVISOR: '/supervisor',
+            ROLE_COUNSELLOR: '/counsellor',
+            ROLE_DEPARTMENT_HEAD: '/department-head',
+        };
+        if (roleToURL[role]) {
+            if (role === userRole) {
+                return;
+            }
+            navigate(roleToURL[role]);
+        } else {
+            console.error('Vai trò không hợp lệ:');
+        }
+    }, [])
+
+
     const [showAddUserModal, setShowAddUserModal] = useState(false)
     const avatarUrl = getCookie('avatarUrl')
-    
+
 
     return (
         <div>
-            <AddUserModal show={showAddUserModal} cb={()=>{setShowAddUserModal(false)}}></AddUserModal>
+            <AddUserModal show={showAddUserModal} cb={() => { setShowAddUserModal(false) }}></AddUserModal>
             <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
 
             <div className="p-12">
@@ -45,7 +72,7 @@ const User = () => {
                         </tbody>
                     </table>
                     <div className="flex justify-center w-full">
-                        <button className="bg-[#2CC168] rounded-full p-2 m-1 text-white" onClick={()=>{setShowAddUserModal(true)}}>
+                        <button className="bg-[#2CC168] rounded-full p-2 m-1 text-white" onClick={() => { setShowAddUserModal(true) }}>
                             <PlusCircleIcon className="w-6 h-6 text-white inline-block"></PlusCircleIcon>Thêm người dùng</button>
                     </div>
                 </div>

@@ -23,7 +23,7 @@ const Register = () => {
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
-    const data = ["Sinh Viên", "Phụ Huynh", "Học Sinh"]
+    const data = ["Sinh Viên", "Phụ Huynh", "Học Sinh", 'Cựu Sinh Viên']
 
     const handleSelect = (newValue) => {
         setOccupation(newValue)
