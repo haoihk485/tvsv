@@ -25,10 +25,9 @@ const AddFieldModal = ({show, cb, dataChange, page}) => {
                 setFieldName('')
                 const response2 = getAllField(page)
                 if(response2.success){
-                    dataChange(response2.data.items)
+                    dataChange(response2.data.items, response2.data.page, response2.data.pages)
                 }
             }
-
         } catch (error) {
             console.log(error.message)
         } finally{
