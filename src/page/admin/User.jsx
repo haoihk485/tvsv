@@ -1,11 +1,10 @@
 import { useState } from "react"
 
-import AdminNav from "../../components/AdminNav"
+import AdminNav from "../../ui/admin/AdminNav"
 import { getCookie } from "../../utils/cookie"
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
-import AddUserModal from "../../components/modal/AddUserModal"
+import AddUserModal from "../../ui/admin/user/AddUserModal"
 import blankAvt from "../../assets/img/blankAvt.png"
-import { forward } from "../../utils/route"
 
 
 const User = () => {

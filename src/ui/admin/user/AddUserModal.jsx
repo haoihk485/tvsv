@@ -2,7 +2,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid'
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { useCallback } from 'react'
 
-import MyInput from '../MyInPut'
+import MyInput from '../../../components/MyInPut'
 
 
 const AddUserModal = ({ show, cb }) => {

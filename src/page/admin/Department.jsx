@@ -6,12 +6,12 @@ import {
 } from '@heroicons/react/24/solid'
 
 
-import AdminNav from "../../components/AdminNav"
+import AdminNav from "../../ui/admin/AdminNav"
 import { getCookie } from "../../utils/cookie"
-import AddDepModal from "../../components/modal/AddDepModal"
+import AddDepModal from "../../ui/admin/department/AddDepModal"
 import blankAvt from "../../assets/img/blankAvt.png"
-import { getDeparments, updateDepartmentStatus } from "../../utils/request"
-import DepDetailModal from "../../components/modal/DepDetailModal"
+import { getDeparments, updateDepartmentStatus } from "../../utils/admin/departmentRequest"
+import DepDetailModal from "../../ui/admin/department/DepDetailModal"
 import { useNavigate } from "react-router-dom"
 import Switch from "../../components/Switch"
 
@@ -22,11 +22,8 @@ const Department = () => {
     const userRole = getCookie('role');
     const role = 'ROLE_ADMIN'
 
-
-
     useEffect(() => {
         if (!userRole) {
-            console.log('worked');
             return navigate('/')
         }
         const roleToURL = {
@@ -134,7 +131,6 @@ const Department = () => {
 
     const sort = async () => {
         if (isLoading) return
-        console.log('work')
         setIsLoading(true)
 
         try {
@@ -196,7 +192,7 @@ const Department = () => {
     return (
         <div>
             <AddDepModal show={showAddDepModal} cb={() => { setShowAddDepModal(false) }}></AddDepModal>
-            <DepDetailModal show={showDetailDepModal} cb={() => { setShowDetailDepModal(false) }} id={id} dataChange={handleDataChange} page={page}></DepDetailModal>
+            <DepDetailModal show={showAddDepModal} cb={() => { setShowDetailDepModal(false) }} id={id} dataChange={handleDataChange} page={page}></DepDetailModal>
             <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
             <div className="p-12">
                 <div className="flex justify-between w-full mb-5 items-center">

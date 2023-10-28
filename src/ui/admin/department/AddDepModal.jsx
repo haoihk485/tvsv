@@ -1,10 +1,11 @@
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { useCallback, useState } from 'react'
-import { addDepartment, refreshToken } from '../../utils/request'
-import { getCookie } from '../../utils/cookie'
+import { addDepartment } from '../../../utils/admin/departmentRequest'
+import { refreshToken } from '../../../utils/request'
+import { getCookie } from '../../../utils/cookie'
 
-import MyInput from '../MyInPut'
+import MyInput from '../../../components/MyInPut'
 
 const AddDepModal = ({ show, cb }) => {
     const [depName, setDepName] = useState('')

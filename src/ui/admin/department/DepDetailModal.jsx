@@ -3,8 +3,10 @@ import { XMarkIcon, PencilIcon, ArrowLeftOnRectangleIcon } from '@heroicons/reac
 
 import {
     updateDepartment,
-    getDeparmentDetailById, refreshToken, getDeparments
-} from '../../utils/request'
+    getDeparmentDetailById, getDeparments
+} from '../../../utils/admin/departmentRequest'
+
+import { refreshToken } from '../../../utils/request'
 
 
 

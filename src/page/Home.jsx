@@ -5,7 +5,7 @@ import { PencilIcon, QuestionMarkCircleIcon, TrashIcon } from '@heroicons/react/
 import Navigation from "../components/Navigation"
 import Footer from '../components/Footer'
 import QuestionBox from '../components/QuestionBox'
-import TextEditorModal from '../components/modal/TextEditorModal'
+import TextEditorModal from '../components/TextEditorModal'
 import { getCookie } from '../utils/cookie.jsx'
 
 

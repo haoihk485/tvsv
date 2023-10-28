@@ -1,9 +1,9 @@
-import AdmDashBoard from '../../components/AdmDashBoard'
-
-import AdminNav from "../../components/AdminNav"
+import AdmDashBoard from '../../ui/admin/AdmDashBoard'
+import AdminNav from "../../ui/admin/AdminNav"
 import { getCookie } from "../../utils/cookie.jsx"
 import blankAvt from "../../assets/img/blankAvt.png"
 import { forward } from '../../utils/route'
+
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
