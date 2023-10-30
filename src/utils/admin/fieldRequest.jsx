@@ -1,8 +1,10 @@
 import { getCookie } from "../cookie"
 
-export function getAllField(page, sortBy = 'name', sortType = 'asc') {
+export function getAllField(page, sortBy = 'name', sortType = 'asc', search= '') {
+    const searchKey = search!==''? `value=${search}` : ''
     const sortOption = `&sort=${sortBy},${sortType}`
-    const url = `https://student-consulting.onrender.com/api/fields?size=3&page=${page}${sortOption}`
+
+    const url = `https://student-consulting.onrender.com/api/fields?${searchKey}&size=3&page=${page}${sortOption}`
     const options = {
         method: "GET",
         headers: {

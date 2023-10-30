@@ -49,6 +49,7 @@ const Field = () => {
     const [page, setPage] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
+    const [searchKey, setSearchKey] = useState('')
     const [sortBy, setSortBy] = useState('name')
     const [sortType, setSortType] = useState('asc')
     const [id, setId] = useState('')
@@ -86,7 +87,7 @@ const Field = () => {
                 break;
         }
         try {
-            const response = await getAllField(fowardPage, sortBy, sortType)
+            const response = await getAllField(fowardPage, sortBy, sortType, searchKey)
             if (response.success === true) {
                 response.data.items ? seTableData(response.data.items) : seTableData(tableData)
                 if (response.data) {
@@ -107,7 +108,26 @@ const Field = () => {
         setTotalPage(totalPage)
     }
 
+    const searchHandle = async () => {
+        if (isLoading) return
+        setIsLoading(true)
 
+        try {
+            const response = await getAllField(0, sortBy, sortType, searchKey)
+            console.log(response);
+            if (response.success) {
+                response.data.items ? seTableData(response.data.items) : seTableData(tableData)
+                if (response.data) {
+                    setPage(response.data.page)
+                    setTotalPage(response.data.pages)
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
 
     return (
@@ -123,22 +143,10 @@ const Field = () => {
                 </div>
 
                 <div className="mb-3">
-                    <div className=' relative w-[80%] inline-block'>
-                        <MagnifyingGlassIcon className='w-6 h-6 absolute m-1 right-0 cursor-pointer bg-blue-500 text-white rounded-full p-1'></MagnifyingGlassIcon>
-                        <input type="text" className='w-full outline-none border border-gray-300 rounded-full pl-3 py-1 pr-9' placeholder="Tìm kiếm" />
-                    </div>
-                    <div className="ml-[1%] w-[19%] relative inline-block">
-                        <div className="rounded-full border border-gray-500 py-1 pl-5 flex justify-between" >
-                            <h1 className="inline-block">all</h1>
-                            <ChevronDownIcon className="w-4 h-4 inline-block mt-1 mr-5 cursor-pointer"></ChevronDownIcon>
-                        </div>
-                        <div className={`rounded-xl border bg-gray-300 absolute w-full shadow-md hidden overflow-hidden`}>
-                            <ul className="w-full">
-                                <li className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1">Tất cả</li>
-                                <li className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1 border-y">Hoạt động</li>
-                                <li className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1">Dừng hoạt động</li>
-                            </ul>
-                        </div>
+                    <div className=' relative w-full inline-block'>
+                        <MagnifyingGlassIcon className='w-6 h-6 absolute m-1 right-0 cursor-pointer bg-blue-500 text-white rounded-full p-1'
+                            onClick={searchHandle}></MagnifyingGlassIcon>
+                        <input type="text" className='w-full outline-none border border-gray-300 rounded-full pl-3 py-1 pr-9' placeholder="Tìm kiếm" value={searchKey} onChange={(e) => setSearchKey(e.target.value)} />
                     </div>
                 </div>
 

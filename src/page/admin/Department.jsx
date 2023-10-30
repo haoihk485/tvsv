@@ -14,6 +14,7 @@ import { getDeparments, updateDepartmentStatus } from "../../utils/admin/departm
 import DepDetailModal from "../../ui/admin/department/DepDetailModal"
 import { useNavigate } from "react-router-dom"
 import Switch from "../../components/Switch"
+import { refreshToken } from "../../utils/request"
 
 const Department = () => {
 
@@ -171,8 +172,9 @@ const Department = () => {
     const switchHandle = async (active, depId) => {
         if (!confirm(active ? "Bạn chắc chắn muốn khóa phòng ban này?" : "Bạn chắc chắn muốn mở khóa phòng ban này?")) return
         if (isLoading) return
+        setIsLoading(true)
         try {
-            console.log('working')
+            await refreshToken()
             const response = await updateDepartmentStatus(depId)
             if (response.success) {
                 alert('Cập nhật trạng thái thành công')

@@ -23,7 +23,7 @@ const AddFieldModal = ({show, cb, dataChange, page}) => {
             if(response.success) {
                 alert(response.message)
                 setFieldName('')
-                const response2 = getAllField(page)
+                const response2 = await getAllField(page)
                 if(response2.success){
                     dataChange(response2.data.items, response2.data.page, response2.data.pages)
                 }
@@ -43,9 +43,9 @@ const AddFieldModal = ({show, cb, dataChange, page}) => {
                         <XMarkIcon className="w-4 h-4 cursor-pointer bg-red-500 text-white " onClick={handleClose}></XMarkIcon>
                     </div>
                     <div className='w-full flex flex-col mb-5'>
-                        <h1 className='text-center text-lg m-1 text-blue-500'>Thêm Phòng ban</h1>
+                        <h1 className='text-center text-lg m-1 text-blue-500'>Thêm Lĩnh Vực</h1>
                         <div className='flex justify-between items-center mt-2'>
-                            <label htmlFor="depName">Tên phòng ban:</label>
+                            <label htmlFor="depName">Tên lĩnh vực:</label>
                             <MyInput t={'text'} n={'depName'} p={'Tên Phòng Ban'} v={fieldName} oC={(e)=>{setFieldName(e.target.value)}}></MyInput>
                         </div>
                     </div>

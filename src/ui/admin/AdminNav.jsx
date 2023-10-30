@@ -2,11 +2,14 @@ import { ChevronDownIcon, Bars3Icon } from '@heroicons/react/24/solid'
 import downArrow from '../../assets/svg/arrow_drop_down.svg'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCookie } from '../../utils/cookie'
+import { getCookie, deleteAllCookies } from '../../utils/cookie'
+import { logout } from '../../utils/request'
 
 const AdminNav = ({ avatarUrl }) => {
     const [isShow, setIsShow] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
+    const [showUserMenu, SetShowUserMenu] = useState(false)
     const showSideBar = () => {
         setIsShow(!isShow)
     }
@@ -31,9 +34,17 @@ const AdminNav = ({ avatarUrl }) => {
         <div className='z-10 relative'>
             <div className='bg-[#2CC168] p-2 flex items-center justify-between'>
                 <Bars3Icon className='h-6 w-6 mx-1 cursor-pointer' onClick={showSideBar}></Bars3Icon>
-                <div className=" flex items-center mx-1 bg-blue-200 px-2 py-[2px] rounded-full cursor-pointer">
-                    <img src={avatarUrl} alt="" className='h-7 w-7 m-1 rounded-full' />
-                    <img src={downArrow} alt="" className='' />
+                <div>
+                    <div className=" flex items-center mx-1 bg-blue-200 px-2 py-[2px] rounded-full cursor-pointer" onClick={()=>SetShowUserMenu(!showUserMenu)}>
+                        <img src={avatarUrl} alt="" className='h-7 w-7 m-1 rounded-full' />
+                        <img src={downArrow} alt="" className='' />
+                    </div>
+                    <div className={`absolute bg-gray-300 w-[180px] right-3 rounded-lg border overflow-hidden shadow-md ${showUserMenu?'':'hidden'}`}>
+                        <ul className='px-3 py-1'>
+                            <li className='cursor-pointer hover:text-gray-600 my-1'>Chỉnh sửa thông tin</li>
+                            <li className='cursor-pointer hover:text-gray-600 my-1 border-t-2 ' onClick={logoutHandle}>Đăng xuất</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div className={`fixed top-[56px] left-0 right-0 bottom-0 ${isShow ? '' : 'hidden'} translate-x-[0%] duration-[2s]`}>
@@ -53,6 +64,7 @@ const AdminNav = ({ avatarUrl }) => {
                                 onClick={() => { logoutHandle }}>Đăng xuất</button>
                         </div>
                     </div>
+                    <div className='w-[70%]' onClick={()=>{setIsShow(!isShow)}}></div>
                 </div>
             </div>
         </div>

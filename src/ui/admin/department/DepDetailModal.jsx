@@ -62,10 +62,6 @@ const DepDetailModal = ({ cb, id, show, dataChange, page }) => {
                     </div>
                     <div className='w-full flex flex-col'>
                         <h1 className='text-center text-lg m-1 text-blue-500'>Phòng Ban</h1>
-                        {/* <div className='flex justify-center items-center border-2'>
-                            <img src={logo} className='w-14 h-14' ></img>
-                            <input type="file" className='ml-5' accept="image/png, image/jpeg" onChange={handleImageChange} disabled={!editing} />
-                        </div> */}
                         <div className='flex justify-between items-center mt-2'>
                             <label htmlFor="depName">Id:</label>
                             <h1 className='text-gray-500 border-b border-black'>{id}</h1>
