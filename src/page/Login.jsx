@@ -68,7 +68,7 @@ const Login = () => {
                     else
                         document.cookie = `avatarUrl=${avt}`
                     document.cookie = `role=${response.data.role}`
-                    if (response.data.role !== 'ROLE_USER') {
+                    if (response.data.role === 'ROLE_ADMIN') {
                         navigate('/admin')
                     } else { navigate('/') }
 
