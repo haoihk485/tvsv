@@ -111,13 +111,13 @@ const Field = () => {
     const searchHandle = async () => {
         if (isLoading) return
         setIsLoading(true)
-
+        console.log('work');
         try {
             const response = await getAllField(0, sortBy, sortType, searchKey)
-            console.log(response);
             if (response.success) {
                 response.data.items ? seTableData(response.data.items) : seTableData(tableData)
                 if (response.data) {
+                    console.log(response);
                     setPage(response.data.page)
                     setTotalPage(response.data.pages)
                 }

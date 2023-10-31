@@ -1,6 +1,7 @@
 import axios from "axios"
-import { getCookie } from "./cookie"
-import {isAccessTokenAlive} from "./jwt"
+import { deleteAllCookies, getCookie } from "./cookie"
+import { isAccessTokenAlive } from "./jwt"
+import { useNavigate } from "react-router-dom"
 
 
 export function register(fullName, email, phone, password, occupation) {
@@ -61,7 +62,7 @@ export function logout() {
         .catch(error => console.log(error))
 }
 export function refreshToken() {
-    if(isAccessTokenAlive(getCookie('accessToken'))) return
+    if (isAccessTokenAlive(getCookie('accessToken'))) return
     const option = {
         method: "POST",
         credentials: "include",
@@ -73,19 +74,29 @@ export function refreshToken() {
     return fetch(url, option)
         .then(response => response.json())
         .then(info => {
-            console.log(info)
-            console.log(document.cookie)
-            document.cookie = `accessToken=${info.data.token}`
-            document.cookie = `fullName=${info.data.name}`
-            document.cookie = `role=${info.data.role}`
-            console.log(document.cookie)
+            if (info.success) {
+                console.log(info)
+                console.log(document.cookie)
+                document.cookie = `accessToken=${info.data.token}`
+                document.cookie = `fullName=${info.data.name}`
+                document.cookie = `role=${info.data.role}`
+                console.log(document.cookie)
+            }
+            else {
+                alert('Phiên đăng nhập hết hạn')
+                deleteAllCookies()
+            }
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+            alert('Phiên đăng nhập hết hạn')
+            deleteAllCookies()
+            console.log(error)
+        })
 }
 
 
 
-export function uploadImage(formData, id){
+export function uploadImage(formData, id) {
     const options = {
         method: "POST",
         body: formData,
@@ -101,14 +112,15 @@ export function uploadImage(formData, id){
         .catch(error => console.log(error))
 }
 
-export function uploadImageAxios (formData, id, config){
+export function uploadImageAxios(formData, id, config) {
     try {
         const url = `https://student-consulting.onrender.com/uploads/images/${id}`;
         const config = {
             headers: {
-              "Content-Type": "multipart/form-data",
-              'Authorization': `Bearer ${getCookie('accessToken')}`
-            },}
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${getCookie('accessToken')}`
+            },
+        }
         return axios.post(url, formData, config)
     } catch (error) {
         console.log(error.message)

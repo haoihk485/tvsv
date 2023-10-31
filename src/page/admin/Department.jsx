@@ -194,7 +194,7 @@ const Department = () => {
     return (
         <div>
             <AddDepModal show={showAddDepModal} cb={() => { setShowAddDepModal(false) }}></AddDepModal>
-            <DepDetailModal show={showAddDepModal} cb={() => { setShowDetailDepModal(false) }} id={id} dataChange={handleDataChange} page={page}></DepDetailModal>
+            <DepDetailModal show={showDetailDepModal} cb={() => { setShowDetailDepModal(false) }} id={id} dataChange={handleDataChange} page={page}></DepDetailModal>
             <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
             <div className="p-12">
                 <div className="flex justify-between w-full mb-5 items-center">

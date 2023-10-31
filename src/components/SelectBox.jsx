@@ -21,8 +21,8 @@ const SelectBox = (props) => {
             </div>
             <div className={`absolute w-full ${isOpen ? "" : "hidden"} rounded-xl overflow-hidden`}>
                 <ul >
-                    {props.data.map((t) => {
-                        return <li key={t} className="p-2 text-sm hover:bg-deep-orange-400 bg-gray-200 " value={t}
+                    {props.data && props.data.map((t, i) => {
+                        return <li key={i} className="p-2 text-sm hover:bg-deep-orange-400 bg-gray-200 " value={t}
                             onClick={() => {
                                 props.eleClick(t);
                                 setIsOpen(false)

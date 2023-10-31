@@ -12,6 +12,7 @@ import * as request from "../utils/request.jsx"
 import avt from "../assets/img/blankAvt.png"
 import sideImage from '../assets/img/schoolView.png'
 import logo from '../assets/img/logo.png'
+import authorizeRoles from "../middlewares/auth";
 
 
 
@@ -68,7 +69,7 @@ const Login = () => {
                     else
                         document.cookie = `avatarUrl=${avt}`
                     document.cookie = `role=${response.data.role}`
-                    if (response.data.role === 'ROLE_ADMIN') {
+                    if (authorizeRoles(response.data.role, 'ROLE_ADMIN')) {
                         navigate('/admin')
                     } else { navigate('/') }
 
