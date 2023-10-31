@@ -20,7 +20,6 @@ import AddUserModal from "../../ui/admin/user/AddUserModal"
 import blankAvt from "../../assets/img/blankAvt.png"
 import { refreshToken } from "../../utils/request"
 import { getAllUser, updateUserStatus } from "../../utils/admin/userRequest"
-import StatusFilter from "../../ui/admin/user/statusFilter"
 import Filter from "../../ui/admin/user/Filter"
 import Switch from "../../components/Switch"
 
