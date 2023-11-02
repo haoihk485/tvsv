@@ -8,7 +8,7 @@ const SelectBox = (props) => {
             <div className="">
                 <div className="bg-white py-2 pl-2 rounded-xl border w-full cursor-pointer flex flex-row justify-between" onClick={() => {
                     {
-                        if(props.disabled === true){
+                        if (props.disabled === true) {
                             setIsOpen(false)
                             return
                         }
@@ -19,14 +19,14 @@ const SelectBox = (props) => {
                     <ChevronDownIcon className="h-6 w-6 z-20 mr-3"></ChevronDownIcon>
                 </div>
             </div>
-            <div className={`absolute w-full ${isOpen ? "" : "hidden"} rounded-xl overflow-hidden`}>
-                <ul >
-                    {props.data && props.data.map((t, i) => {
-                        return <li key={i} className="p-2 text-sm hover:bg-deep-orange-400 bg-gray-200 " value={t}
+            <div className={`absolute w-full ${isOpen ? "" : "hidden"} rounded-xl overflow-hidden shadow-lg`}>
+                <ul className="max-h-[250px] overflow-y-auto">
+                    {props.data && props.data.map((data, i) => {
+                        return <li key={i} className="p-2 text-sm hover:bg-deep-orange-400 bg-gray-200 " value={data.id ? data.id : data.name}
                             onClick={() => {
-                                props.eleClick(t);
+                                data.id ? props.eleClick(data.name, data.id) : props.eleClick(data.name)
                                 setIsOpen(false)
-                            }}>{t}</li>
+                            }}>{data.name}</li>
                     })}
                 </ul>
             </div>

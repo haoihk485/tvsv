@@ -26,8 +26,8 @@ const Filter = ({ type, filterData, onEleClick }) => {
                 <div className={`rounded-xl border bg-gray-300 absolute w-full shadow-md overflow-hidden `}>
                     <ul className="w-full">
                         {
-                            filterData && filterData.map(data => {
-                                return <li className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1" onClick={()=>handleEleClick(data.value, data.view)}>{data.view}</li>
+                            filterData && filterData.map((data, i) => {
+                                return <li key={i} className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1" onClick={()=>handleEleClick(data.value, data.view)}>{data.view}</li>
                             })
                         }
                     </ul>

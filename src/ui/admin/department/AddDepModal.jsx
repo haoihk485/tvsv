@@ -1,46 +1,27 @@
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { useCallback, useState } from 'react'
-import { addDepartment } from '../../../utils/admin/departmentRequest'
-import { refreshToken } from '../../../utils/request'
-import { getCookie } from '../../../utils/cookie'
 
 import MyInput from '../../../components/MyInPut'
 
-const AddDepModal = ({ show, cb }) => {
+const AddDepModal = ({ cb, dataChange }) => {
     const [depName, setDepName] = useState('')
     const [desc, setDesc] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    const accessToken = getCookie('accessToken')
 
     const handleClose = useCallback(() => {
         cb();
     }, [cb]);
 
     const addDepHandle = async () => {
-        if (isLoading) { return; }
-        setIsLoading(true);
-        try {
-            refreshToken()
-            if (depName !== '') {
-                const response = await addDepartment(depName, desc, accessToken);
-                console.log(response)
-                if (response.data.success === true) {
-                    alert(response.data.message);
-                    setDepName('');
-                    setDesc('');
-                }
-            }
-        } catch (error) {
-            console.error(error); // Xử lý lỗi
-        }
-        finally{
-            setIsLoading(false)
-        }
+        if (isLoading) return
+        await dataChange(depName, desc)
+        setDepName('')
+        setDesc('')
     }
 
     return (
-        <div className={`fixed top-0 bottom-0 right-0 left-0 bg-gray-500/30 border ${show ? "" : "hidden"} z-20`}>
+        <div className={`fixed top-0 bottom-0 right-0 left-0 bg-gray-500/30 z-20`}>
             <div className="flex justify-center h-full items-center ">
                 <div className="bg-white rounded-md overflow-hidden p-1 flex-col justify-center items-center flex min-w-[350px]">
                     <div className="bg-gray-300 w-full flex justify-end">

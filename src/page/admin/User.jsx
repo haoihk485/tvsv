@@ -5,12 +5,12 @@ import { getCookie } from "../../utils/cookie"
 import {
     PlusCircleIcon,
     MagnifyingGlassIcon,
-    ChevronDownIcon,
     PencilSquareIcon,
     ChevronDoubleLeftIcon,
     ChevronDoubleRightIcon,
     ArrowDownIcon,
-    ArrowUpIcon
+    ArrowUpIcon,
+    BriefcaseIcon
 } from '@heroicons/react/24/solid'
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
@@ -22,6 +22,7 @@ import { refreshToken } from "../../utils/request"
 import { getAllUser, updateUserStatus } from "../../utils/admin/userRequest"
 import Filter from "../../ui/admin/user/Filter"
 import Switch from "../../components/Switch"
+import CoordinateModal from "../../ui/admin/user/CoordinateModal"
 
 
 const User = () => {
@@ -54,6 +55,7 @@ const User = () => {
 
 
     const [showAddUserModal, setShowAddUserModal] = useState(false)
+    const [showCoordinateModal, setShowCoordinateModal] =useState(false)
     const avatarUrl = getCookie('avatarUrl') ? getCookie('avatarUrl') : blankAvt
     const [isLoading, setIsLoading] = useState(false)
     const [page, setPage] = useState(0)
@@ -178,12 +180,12 @@ const User = () => {
 
     const handleUpdateStatus = async (active, id) => {
         if (isLoading) return
-        const message = active?"Bạn có chắc sẽ vô hiệu hóa người dùng":"Bạn có chắc sẽ mở khóa người dùng"
+        const message = active ? "Bạn có chắc sẽ vô hiệu hóa người dùng" : "Bạn có chắc sẽ mở khóa người dùng"
         if (!confirm(message)) return
         setIsLoading(true)
         try {
             const response = await updateUserStatus(id)
-            if(response.success){
+            if (response.success) {
                 getData(page)
             }
         } catch (error) {
@@ -195,14 +197,20 @@ const User = () => {
 
     return (
         <div>
-            {showAddUserModal && <AddUserModal cb={() => { setShowAddUserModal(false) }}  dataChange = {getData}></AddUserModal>}
+            {showAddUserModal && <AddUserModal cb={() => { setShowAddUserModal(false) }} dataChange={getData}></AddUserModal>}
+            {showCoordinateModal && <CoordinateModal cb={() => { setShowCoordinateModal(false) }}></CoordinateModal>}
             <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
+            
 
             <div className="p-12">
                 <div className="flex justify-between w-full mb-5 items-center">
                     <h1 className="font-bold text-3xl">Nhân sự</h1>
-                    <button className="bg-[#2CC168] rounded-full p-2 m-1 text-white" onClick={() => { setShowAddUserModal(true) }}>
-                        <PlusCircleIcon className="w-6 h-6 text-white inline-block"></PlusCircleIcon>Thêm nhân sự</button>
+                    <div>
+                        <button className="bg-[#2CC168] rounded-full p-2 m-1 text-white" onClick={() => { setShowAddUserModal(true) }}>
+                            <PlusCircleIcon className="w-6 h-6 text-white inline-block"></PlusCircleIcon>Thêm nhân sự</button>
+                        <button className="bg-[#2CC168] rounded-full p-2 m-1 text-white" onClick={() => { setShowCoordinateModal(true) }}>
+                            <BriefcaseIcon className="w-6 h-6 text-white inline-block"></BriefcaseIcon>Phân phối nhân sự</button>
+                    </div>
                 </div>
                 <div className="mb-3">
                     <div className=' relative w-[56%] inline-block'>
@@ -211,7 +219,7 @@ const User = () => {
                             placeholder="Tìm kiếm"
                             values={searchKey}
                             onChange={(e) => setSearchKey(e.target.value)}
-                            />
+                        />
                     </div>
                     <div className="ml-[1%] w-[17%] relative inline-block">
                         <Filter type={'Nghề nghiệp'} filterData={occupationFilterData} onEleClick={handleOccupationSort}></Filter>

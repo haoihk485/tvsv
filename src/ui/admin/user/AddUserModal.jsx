@@ -8,8 +8,12 @@ import { addUser } from '../../../utils/admin/userRequest'
 import { refreshToken } from '../../../utils/request'
 
 
-const AddUserModal = ({ show, cb, dataChange }) => {
-    const roleData = ['Tư vấn viên', 'Trưởng phòng ban', 'Giám sát']
+const AddUserModal = ({ cb, dataChange }) => {
+    const roleData = [
+        { name: 'Tư vấn viên' },
+        { name: 'Trưởng phòng ban' },
+        { name: 'Giám sát' }
+    ]
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
@@ -29,7 +33,7 @@ const AddUserModal = ({ show, cb, dataChange }) => {
             console.log(role);
             refreshToken()
             const response = await addUser(name, email, phone, password, role)
-            if (response.data){
+            if (response.data) {
                 dataChange(0)
             } else {
                 alert(response.message)
@@ -37,13 +41,13 @@ const AddUserModal = ({ show, cb, dataChange }) => {
         } catch (error) {
             console.log(error.message);
         }
-        finally{
+        finally {
             setIsLoading(false)
         }
     }
 
     const handleEleSelectBoxClick = (r) => {
-        const temp = r==='Tư vấn viên'?'counsellor':r==='Trưởng phòng ban'?'departmentHead':'supervisor'
+        const temp = r === 'Tư vấn viên' ? 'counsellor' : r === 'Trưởng phòng ban' ? 'departmentHead' : 'supervisor'
         setSelectBoxText(r)
         setRole(temp)
     }

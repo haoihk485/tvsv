@@ -10,7 +10,7 @@ import { refreshToken } from '../../../utils/request'
 
 
 
-const DepDetailModal = ({ cb, id, show, dataChange, page }) => {
+const DepDetailModal = ({ cb, id, dataChange }) => {
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
@@ -32,28 +32,12 @@ const DepDetailModal = ({ cb, id, show, dataChange, page }) => {
         cb();
     }, [cb]);
 
-
-    const handleUdate = async () => {
-        refreshToken()
-        try {
-            const response = await updateDepartment(id, name, description)
-            if (response.success) {
-                alert(response.message)
-                const response2 = await getDeparments(page)
-                if (response2.success) {
-                    dataChange(response2.data.items)
-                }
-            }
-        } catch (error) {
-            console.log(error.message)
-        }
-        finally {
-            setEditing(false)
-        }
+    const handleUpdateDepartmnet = () => {
+        dataChange(id, name, description)
     }
 
     return (
-        <div className={`fixed top-0 bottom-0 right-0 left-0 bg-gray-500/30 ${show ? "" : "hidden"} z-20`}>
+        <div className={`fixed top-0 bottom-0 right-0 left-0 bg-gray-500/30 z-20`}>
             <div className="flex justify-center h-full items-center">
                 <div className="bg-white rounded-md p-1 flex-col justify-center items-center flex min-w-[350px]">
                     <div className="bg-gray-300 w-full flex justify-end">
@@ -81,7 +65,7 @@ const DepDetailModal = ({ cb, id, show, dataChange, page }) => {
                         <PencilIcon className='h-4 w-4 text-white inline-block'></PencilIcon>Chỉnh sửa</button>
                     <div className={`flex justify-around w-full ${editing ? '' : 'hidden'} mt-5`}>
                         <button className={`bg-[#2CC168] rounded-full p-2 m-1 text-white `}
-                            onClick={handleUdate}>
+                            onClick={handleUpdateDepartmnet}>
                             <PencilIcon className='h-4 w-4 text-white inline-block'></PencilIcon>Xác nhận</button>
                         <button className={`bg-red-400 rounded-full p-2 m-1 text-white min-w-[100px]`}
                             onClick={() => setEditing(!editing)}>

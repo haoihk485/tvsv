@@ -2,16 +2,25 @@ import { useEffect, useState } from "react"
 import {
     PlusCircleIcon, PencilSquareIcon, ArrowDownIcon,
     MagnifyingGlassIcon, ArrowUpIcon,
-    ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronDownIcon
+    ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronDownIcon,
 } from '@heroicons/react/24/solid'
+import {
+    DocumentMagnifyingGlassIcon
+} from '@heroicons/react/24/outline'
 
 
 import AdminNav from "../../ui/admin/AdminNav"
 import { getCookie } from "../../utils/cookie"
 import AddDepModal from "../../ui/admin/department/AddDepModal"
 import blankAvt from "../../assets/img/blankAvt.png"
-import { getDeparments, updateDepartmentStatus } from "../../utils/admin/departmentRequest"
+import {
+    addDepartment,
+    getDeparments,
+    updateDepartment,
+    updateDepartmentStatus,
+} from "../../utils/admin/departmentRequest"
 import DepDetailModal from "../../ui/admin/department/DepDetailModal"
+import UpdateDepartmentHeadModal from "../../ui/admin/department/UpdateDepartmentHeadModal"
 import { useNavigate } from "react-router-dom"
 import Switch from "../../components/Switch"
 import { refreshToken } from "../../utils/request"
@@ -44,12 +53,10 @@ const Department = () => {
         }
     }, [])
 
-
-
     const [showAddDepModal, setShowAddDepModal] = useState(false)
     const [showDetailDepModal, setShowDetailDepModal] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [tableData, seTableData] = useState([])
+    const [tableData, setTableData] = useState([])
     const [page, setPage] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [id, setId] = useState('')
@@ -59,32 +66,40 @@ const Department = () => {
     const [searchKey, setSearchKey] = useState('')
     const [openStatusFilter, setOpenStatusFilter] = useState(false)
     const [statusFilter, setStatusFilter] = useState('all')
+    const [showUpdatDHModal, setShowUpdatDHModal] = useState(false)
 
     useEffect(() => {
-        // document.cookie = 'sortBy=name'
-        // document.cookie = 'sortType=asc'
+        getData(0)
+    }, [sortBy, sortType, statusFilter])
 
-        getDeparments(0, sortBy, sortType)
-            .then(fetchdata => {
-                fetchdata.data.items ? seTableData(fetchdata.data.items) : seTableData(tableData)
-                if (fetchdata.data) {
-                    setPage(fetchdata.data.page)
-                    setTotalPage(fetchdata.data.pages)
-                }
-            })
-            .catch(error => console.log(error))
-    }, [])
+    const getData = async (fowardPage) => {
+        if (isLoading) return
+        setIsLoading(true)
+        try {
+            await refreshToken(fowardPage)
+            const response = await getDeparments(fowardPage, sortBy, sortType, searchKey, statusFilter)
+            if (response.success) {
+                setTableData(response.data.items)
+                setPage(response.data.page)
+                setTotalPage(response.data.pages)
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const handleDataChange = (newData) => {
-        seTableData(newData)
+        setTableData(newData)
     }
 
 
 
-    const pageHandle = async (type) => {
+    const pageHandle = (type) => {
+        console.log('work');
         if (isLoading) return
-        setIsLoading(true)
-        let fowardPage = page
+        let fowardPage = 0
         switch (type) {
             case 'first':
                 fowardPage = 0
@@ -101,23 +116,7 @@ const Department = () => {
             default:
                 break;
         }
-        try {
-            console.log(sortType)
-            const response = await getDeparments(fowardPage, sortBy, sortType, searchKey, statusFilter)
-            console.log(response)
-            if (response.success === true) {
-                console.log(response.data.page)
-                response.data.items ? seTableData(response.data.items) : seTableData(tableData)
-                if (response.data) {
-                    setPage(response.data.page)
-                    setTotalPage(response.data.pages)
-                }
-            }
-        } catch (error) {
-
-        } finally {
-            setIsLoading(false)
-        }
+        getData(fowardPage)
     }
 
     const nameDescSortHandle = () => {
@@ -126,75 +125,72 @@ const Department = () => {
     }
 
     const nameAscSortHandle = () => {
-        setSortType('asc')
         setSortBy('name')
+        setSortType('asc')
     }
 
-    const sort = async () => {
-        if (isLoading) return
-        setIsLoading(true)
-
-        try {
-            const response = await getDeparments(0, sortBy, sortType, searchKey, statusFilter)
-            if (response.success === true) {
-                seTableData(response.data.items)
-                setPage(0)
-                setTotalPage(response.data.pages)
-            }
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        sort()
-    }, [sortType, statusFilter])
 
     const searchHandle = async () => {
         if (isLoading) return
+        getData(0)
+    }
+
+    const handleUpdateStatus = async (active, depId) => {
+        if (isLoading) return
+        const message = active ? "Bạn có chắc sẽ vô hiệu hóa phòng ban này?" : "Bạn có chắc sẽ mở khóa phòng ban này?"
+        if (!confirm(message)) return
         setIsLoading(true)
         try {
-            const response = await getDeparments(0, sortBy, sortType, searchKey, statusFilter)
-            if (response.success === true) {
-                seTableData(response.data.items)
-                setPage(0)
-                setTotalPage(response.data.pages)
+            const response = await updateDepartmentStatus(depId)
+            if (response.success) {
+                getData(page)
             }
         } catch (error) {
-
+            console.log(error.message);
         } finally {
             setIsLoading(false)
         }
     }
 
-    const switchHandle = async (active, depId) => {
-        if (!confirm(active ? "Bạn chắc chắn muốn khóa phòng ban này?" : "Bạn chắc chắn muốn mở khóa phòng ban này?")) return
+    const handleUpdateDepartment = async (id, name, description) => {
         if (isLoading) return
         setIsLoading(true)
         try {
             await refreshToken()
-            const response = await updateDepartmentStatus(depId)
+            const response = await updateDepartment(id, name, description)
             if (response.success) {
-                alert('Cập nhật trạng thái thành công')
-                const response2 = await getDeparments(page, sortBy, sortType, searchKey, statusFilter)
-                seTableData(response2.data.items)
-                setPage(response2.data.page)
-                setTotalPage(response2.data.pages)
+                alert(response.message)
+                getData(page)
             }
         } catch (error) {
-            console.log(error.message)
+            console.log(error.message);
         } finally {
-            console.log(isLoading)
+            setIsLoading(false)
+        }
+    }
+
+    const handleAddDepartment = async (depName, desc) => {
+        if (isLoading) return
+        setIsLoading(true)
+        try {
+            await refreshToken()
+            const response = await addDepartment(depName, desc)
+            if (response.success) {
+                alert(response.message)
+                getData(0)
+            }
+        } catch (error) {
+            console.log(error.message);
+        } finally {
             setIsLoading(false)
         }
     }
 
     return (
         <div>
-            <AddDepModal show={showAddDepModal} cb={() => { setShowAddDepModal(false) }}></AddDepModal>
-            <DepDetailModal show={showDetailDepModal} cb={() => { setShowDetailDepModal(false) }} id={id} dataChange={handleDataChange} page={page}></DepDetailModal>
+            {showUpdatDHModal && <UpdateDepartmentHeadModal cb={() => { setShowUpdatDHModal(false) }} id={id}></UpdateDepartmentHeadModal>}
+            {showAddDepModal && <AddDepModal cb={() => { setShowAddDepModal(false) }} dataChange={handleAddDepartment}></AddDepModal>}
+            {showDetailDepModal && <DepDetailModal cb={() => { setShowDetailDepModal(false) }} id={id} dataChange={handleUpdateDepartment}></DepDetailModal>}
             <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
             <div className="p-12">
                 <div className="flex justify-between w-full mb-5 items-center">
@@ -209,15 +205,15 @@ const Department = () => {
                     </div>
                     <div className="ml-[1%] w-[19%] relative inline-block">
                         <div className="rounded-full border border-gray-500 py-1 pl-5 flex justify-between" >
-                            <h1 className="inline-block">{statusFilter==='all'?"Tất cả":statusFilter==='active'?"Hoạt động":"Dừng hoạt động"}</h1>
+                            <h1 className="inline-block">{statusFilter === 'all' ? "Tất cả" : statusFilter === 'active' ? "Hoạt động" : "Dừng hoạt động"}</h1>
                             <ChevronDownIcon className="w-4 h-4 inline-block mt-1 mr-5 cursor-pointer"
-                                onClick={() => {setOpenStatusFilter(!openStatusFilter)}}></ChevronDownIcon>
+                                onClick={() => { setOpenStatusFilter(!openStatusFilter) }}></ChevronDownIcon>
                         </div>
-                        <div className= {`rounded-xl border bg-gray-300 absolute w-full shadow-md ${openStatusFilter?"":"hidden"} overflow-hidden`}>
+                        <div className={`rounded-xl border bg-gray-300 absolute w-full shadow-md ${openStatusFilter ? "" : "hidden"} overflow-hidden`}>
                             <ul className="w-full">
-                                <li onClick={()=>{setStatusFilter('all');setOpenStatusFilter(false)}} className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1">Tất cả</li>
-                                <li onClick={()=>{setStatusFilter('active');setOpenStatusFilter(false)}} className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1 border-y">Hoạt động</li>
-                                <li onClick={()=>{setStatusFilter('inactive');setOpenStatusFilter(false)}} className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1">Dừng hoạt động</li>
+                                <li onClick={() => { setStatusFilter('all'); setOpenStatusFilter(false) }} className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1">Tất cả</li>
+                                <li onClick={() => { setStatusFilter('active'); setOpenStatusFilter(false) }} className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1 border-y">Hoạt động</li>
+                                <li onClick={() => { setStatusFilter('inactive'); setOpenStatusFilter(false) }} className="cursor-pointer hover:bg-blue-gray-300 pl-5 py-1">Dừng hoạt động</li>
                             </ul>
                         </div>
                     </div>
@@ -232,8 +228,9 @@ const Department = () => {
                                     <ArrowDownIcon onClick={nameDescSortHandle} className={`inline-block w-4 h-4 ml-2  ${sortType === 'asc' ? "" : "hidden"} cursor-pointer`} ></ArrowDownIcon>
                                     <ArrowUpIcon onClick={nameAscSortHandle} className={`inline-block w-4 h-4 ml-2 cursor-pointer ${sortType === 'desc' ? "" : "hidden"}`} ></ArrowUpIcon>
                                 </th>
-                                <th className="w-[60%]">Miêu tả</th>
-                                <th className='w-[10%]'>Trạng thái</th>
+                                <th className="w-[50%]">Miêu tả</th>
+                                <th className='w-[15%]'>Trạng thái</th>
+                                <th className="w-[5%]"></th>
                                 <th className="w-[5%]"></th>
                             </tr>
                         </thead>
@@ -244,15 +241,22 @@ const Department = () => {
                                         <td className="border-r text-center">{i + 1}</td>
                                         <td className="border-r ">{dep.name}</td>
                                         <td className="border-r ">{dep.description}</td>
-                                        {/* <td className='border-r text-center'>{dep.status ? "Hoạt động" : "Dừng hoạt động"}</td> */}
                                         <td className='flex content-center justify-center h-[40px] border-r items-center'>
-                                            <Switch id={dep.id} active={dep.status ? true : false} oC={switchHandle}></Switch>
+                                            <Switch id={dep.id} active={dep.status ? true : false} oC={handleUpdateStatus}></Switch>
                                         </td>
                                         <td className="text-center min-h-full"><PencilSquareIcon className="w-6 h-6 cursor-pointer"
                                             onClick={() => {
                                                 setId(dep.id)
                                                 setShowDetailDepModal(true)
-                                            }} /></td>
+                                            }} />
+                                        </td>
+                                        <td className="text-center min-h-full"><DocumentMagnifyingGlassIcon className={`w-6 h-6 cursor-pointer ${dep.status?'':'text-gray-600 cursor-auto'}`}
+                                            onClick={() => {
+                                                if (!dep.status) return
+                                                setId(dep.id)
+                                                setShowUpdatDHModal(true)
+                                            }} />
+                                        </td>
                                     </tr>
                                 ))
                             }
