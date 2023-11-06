@@ -9,7 +9,7 @@ import { refreshToken } from "../../../utils/request"
 import { getUserWithoutDep, updateUserDepartment } from "../../../utils/admin/userRequest"
 import blankAvt from "../../../assets/img/blankAvt.png"
 import SelectBox from "../../../components/SelectBox"
-import { getDeparments } from "../../../utils/admin/departmentRequest"
+import { getActiveDepartments } from "../../../utils/admin/departmentRequest"
 import { data } from "autoprefixer"
 
 const CoordinateModal = ({ cb }) => {
@@ -34,9 +34,10 @@ const CoordinateModal = ({ cb }) => {
 
     const getDepartmentData = async () => {
         try {
-            const response = await getDeparments(0, 'name', 'asc', '', 'enabled', 100);
+            const response = await getActiveDepartments();
+            console.log(response);
             if (response.success) {
-                setDepData(response.data.items);
+                setDepData(response.data);
             }
         } catch (error) {
             console.log(error);

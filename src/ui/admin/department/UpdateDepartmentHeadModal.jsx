@@ -6,7 +6,6 @@ import {
     ArrowUpTrayIcon
 } from "@heroicons/react/24/solid"
 
-import SelectBox from "../../../components/SelectBox"
 import { refreshToken } from "../../../utils/request"
 import { getUserByDepartment } from "../../../utils/admin/userRequest"
 import blankAvt from "../../../assets/img/blankAvt.png"
@@ -51,20 +50,16 @@ const UpdateDepartmentHeadModal = ({ cb, id }) => {
         cb()
     }
 
-    const HandleSelectBox = () => {
 
-    }
-
-    const handleUpdateDH = async(depId, userId, username) => {
+    const handleUpdateDH = async (depId, userId, username) => {
         if (isLoading) return
         if (!confirm(`Bạn có muốn "${username}" làm trưởng phòng ban không?`))
-        setIsLoading(true)
+            setIsLoading(true)
 
         try {
             await refreshToken()
             const response = await updateDepartmentHead(userId, depId)
-            if (response.success)
-            {
+            if (response.success) {
                 alert(response.message)
                 getData(0)
             }

@@ -31,7 +31,7 @@ const AddUserModal = ({ cb, dataChange }) => {
         setIsLoading(true)
         try {
             console.log(role);
-            refreshToken()
+            await refreshToken()
             const response = await addUser(name, email, phone, password, role)
             if (response.data) {
                 dataChange(0)

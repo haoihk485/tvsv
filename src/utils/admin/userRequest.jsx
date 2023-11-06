@@ -84,6 +84,7 @@ export function getUserWithoutDep(page, searchKey, size = 10) {
 
 export function updateUserDepartment(userId, depId) {
     const url = `https://student-consulting.onrender.com/api/admin/users/${userId}/departments/${depId}`
+    console.log(url);
     const options = {
         method: "PATCH",
         headers: {
@@ -98,7 +99,8 @@ export function updateUserDepartment(userId, depId) {
 }
 
 export function getUserByDepartment(depId, page, size = 5) {
-    const url = `https://student-consulting.onrender.com/api/admin/users/departments/${depId}?size=${size}&page=${page}&value=coun`
+    const url = `https://student-consulting.onrender.com/api/admin/users/departments/${depId}?size=${size}&page=${page}`
+    console.log(url);
     const options = {
         method: "GET",
         headers: {

@@ -23,37 +23,11 @@ import { getAllUser, updateUserStatus } from "../../utils/admin/userRequest"
 import Filter from "../../ui/admin/user/Filter"
 import Switch from "../../components/Switch"
 import CoordinateModal from "../../ui/admin/user/CoordinateModal"
+import Pagination from "../../components/Pagination"
 
 
 const User = () => {
     // Chuyển trang nếu không phải admin
-    const navigate = useNavigate()
-    const userRole = getCookie('role');
-    const role = 'ROLE_ADMIN'
-
-    useEffect(() => {
-        if (!userRole) {
-            console.log('worked');
-            return navigate('/')
-        }
-        const roleToURL = {
-            ROLE_USER: '/',
-            ROLE_ADMIN: '/admin',
-            ROLE_SUPERVISOR: '/supervisor',
-            ROLE_COUNSELLOR: '/counsellor',
-            ROLE_DEPARTMENT_HEAD: '/department-head',
-        };
-        if (roleToURL[role]) {
-            if (role === userRole) {
-                return;
-            }
-            navigate(roleToURL[role]);
-        } else {
-            console.error('Vai trò không hợp lệ:');
-        }
-    }, [])
-
-
     const [showAddUserModal, setShowAddUserModal] = useState(false)
     const [showCoordinateModal, setShowCoordinateModal] =useState(false)
     const avatarUrl = getCookie('avatarUrl') ? getCookie('avatarUrl') : blankAvt
@@ -199,7 +173,6 @@ const User = () => {
         <div>
             {showAddUserModal && <AddUserModal cb={() => { setShowAddUserModal(false) }} dataChange={getData}></AddUserModal>}
             {showCoordinateModal && <CoordinateModal cb={() => { setShowCoordinateModal(false) }}></CoordinateModal>}
-            <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
             
 
             <div className="p-12">
@@ -245,14 +218,13 @@ const User = () => {
                                     <ArrowDownIcon onClick={() => { sortHandle('email', 'desc') }} className={`ml-1 cursor-pointer inline-block h-4 w-4 ${sort[1].type === 'asc' ? '' : 'hidden'}`}></ArrowDownIcon>
                                     <ArrowUpIcon onClick={() => { sortHandle('email', 'asc') }} className={`ml-1 cursor-pointer inline-block h-4 w-4 ${sort[1].type === 'asc' ? 'hidden' : ''}`}></ArrowUpIcon>
                                 </th>
-                                <th className="w-[10%] text-left">
+                                <th className="w-[15%] text-left">
                                     <p className="inline-block">Số điện thoại</p>
                                     <ArrowDownIcon onClick={() => { sortHandle('phone', 'desc') }} className={`ml-1 cursor-pointer inline-block h-4 w-4 ${sort[2].type === 'asc' ? '' : 'hidden'}`}></ArrowDownIcon>
                                     <ArrowUpIcon onClick={() => { sortHandle('phone', 'asc') }} className={`ml-1 cursor-pointer inline-block h-4 w-4 ${sort[2].type === 'asc' ? 'hidden' : ''}`}></ArrowUpIcon></th>
                                 <th className="w-[15%] text-left">Nghề nghiệp</th>
                                 <th className="w-[15%] text-left">ROLE</th>
                                 <th className="w-[15%] text-left">Status</th>
-                                <th className="w-[5%] text-left"></th>
                             </tr>
                         </thead>
                         <tbody className="">
@@ -271,28 +243,13 @@ const User = () => {
                                                 user.role === 'ROLE_DEPARTMENT_HEAD' ? 'Trưởng phòng ban' :
                                                     user.role === 'ROLE_COUNSELLOR' ? 'Tư vấn viên' : 'Người dùng'}</td>
                                         <td className="ml-1"><Switch id={user.id} active={user.enabled ? true : false} oC={handleUpdateStatus}></Switch></td>
-                                        <td className="ml-1"><PencilSquareIcon className="w-6 h-6 cursor-pointer" /></td>
                                     </tr>
                                 )
                             })}
                         </tbody>
                     </table>
                 </div>
-                <div className='flex justify-center items-center mt-3'>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${((totalPage <= 3 || page === 0) ? "hidden" : "")}`}
-                        onClick={() => { pageHandle('first') }}>
-                        <ChevronDoubleLeftIcon></ChevronDoubleLeftIcon>
-                    </button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${(page === 0) ? "hidden" : ""}`}
-                        onClick={() => { pageHandle('prev') }}>{page}</button>
-                    <button className='bg-[#C12C85] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#C12C85]/80'>{page + 1}</button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${(page === totalPage - 1) ? "hidden" : ""}`}
-                        onClick={() => { pageHandle('next') }}>{page + 2}</button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${((totalPage <= 3 || page === totalPage - 1) ? "hidden" : "")}`}
-                        onClick={() => { pageHandle('final') }}>
-                        <ChevronDoubleRightIcon></ChevronDoubleRightIcon>
-                    </button>
-                </div>
+                <Pagination pageHandle={pageHandle} page={page} totalPage={totalPage}></Pagination>
             </div>
         </div>
     )

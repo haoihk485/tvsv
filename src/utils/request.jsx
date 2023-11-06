@@ -61,7 +61,7 @@ export function logout() {
         .then(info => info)
         .catch(error => console.log(error))
 }
-export function refreshToken() {
+export async function refreshToken() {
     if (isAccessTokenAlive(getCookie('accessToken'))) return
     const option = {
         method: "POST",
@@ -74,23 +74,23 @@ export function refreshToken() {
     return fetch(url, option)
         .then(response => response.json())
         .then(info => {
+            console.log(info);
             if (info.success) {
-                console.log(info)
-                console.log(document.cookie)
                 document.cookie = `accessToken=${info.data.token}`
                 document.cookie = `fullName=${info.data.name}`
                 document.cookie = `role=${info.data.role}`
-                console.log(document.cookie)
             }
             else {
-                alert('Phiên đăng nhập hết hạn')
+                alert(info.message)
                 deleteAllCookies()
+              
             }
+            return
         })
         .catch(error => {
             alert('Phiên đăng nhập hết hạn')
             deleteAllCookies()
-            console.log(error)
+            console.log()
         })
 }
 

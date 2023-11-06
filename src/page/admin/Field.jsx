@@ -12,36 +12,10 @@ import AdminNav from '../../ui/admin/AdminNav';
 import { getAllField } from '../../utils/admin/fieldRequest'
 import FieldDetailModal from '../../ui/admin/field/FieldDetailModal';
 import AddFieldModal from '../../ui/admin/field/AddFieldModal';
+import Pagination from '../../components/Pagination';
 
 
 const Field = () => {
-    // Chuyển trang nếu không phải admin
-    const navigate = useNavigate()
-    const userRole = getCookie('role');
-    const role = 'ROLE_ADMIN'
-
-    useEffect(() => {
-        if (!userRole) {
-            console.log('worked');
-            return navigate('/')
-        }
-        const roleToURL = {
-            ROLE_USER: '/',
-            ROLE_ADMIN: '/admin',
-            ROLE_SUPERVISOR: '/supervisor',
-            ROLE_COUNSELLOR: '/counsellor',
-            ROLE_DEPARTMENT_HEAD: '/department-head',
-        };
-        if (roleToURL[role]) {
-            if (role === userRole) {
-                return;
-            }
-            navigate(roleToURL[role]);
-        } else {
-            console.error('Vai trò không hợp lệ:');
-        }
-    }, [])
-    // ----------------------------------------------------------------------
     const avatarUrl = getCookie('avatarUrl')
     const [showAddFieldModal, setShowAddFieldModal] = useState(false)
     const [showFieldDetail, setShowFieldDetail] = useState(false)
@@ -132,7 +106,6 @@ const Field = () => {
 
     return (
         <div>
-            <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
             <AddFieldModal show={showAddFieldModal} cb={() => setShowAddFieldModal(false)} dataChange={dataChange} page={page}></AddFieldModal>
             <FieldDetailModal show={showFieldDetail} cb={() => setShowFieldDetail(false)} id={id} dataChange={dataChange} page={page}></FieldDetailModal>
             <div className="p-12">
@@ -176,22 +149,7 @@ const Field = () => {
                         </tbody>
                     </table>
                 </div>
-
-                <div className='flex justify-center items-center mt-3'>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${((totalPage <= 3 || page === 0) ? "hidden" : "")}`}
-                        onClick={() => { pageHandle('first') }}>
-                        <ChevronDoubleLeftIcon></ChevronDoubleLeftIcon>
-                    </button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${(page === 0) ? "hidden" : ""}`}
-                        onClick={() => { pageHandle('prev') }}>{page}</button>
-                    <button className='bg-[#C12C85] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#C12C85]/80'>{page + 1}</button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${(page === totalPage - 1) ? "hidden" : ""}`}
-                        onClick={() => { pageHandle('next') }}>{page + 2}</button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${((totalPage <= 3 || page === totalPage - 1) ? "hidden" : "")}`}
-                        onClick={() => { pageHandle('final') }}>
-                        <ChevronDoubleRightIcon></ChevronDoubleRightIcon>
-                    </button>
-                </div>
+                <Pagination pageHandle={pageHandle} page={page} totalPage={totalPage}></Pagination>
             </div>
         </div>
     )

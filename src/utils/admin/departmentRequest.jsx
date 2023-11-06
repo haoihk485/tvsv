@@ -102,3 +102,17 @@ export function updateDepartmentHead(userId, departmentHeadId) {
         .then(info => info)
         .catch(error => console.log(error))
 }
+
+export function getActiveDepartments() {
+    const option = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+    const url = 'https://student-consulting.onrender.com/api/departments/all'
+    return fetch(url, option)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+}

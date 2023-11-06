@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react"
 import {
-    PlusCircleIcon, PencilSquareIcon, ArrowDownIcon,
-    MagnifyingGlassIcon, ArrowUpIcon,
-    ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronDownIcon,
+    PlusCircleIcon,
+    PencilSquareIcon,
+    ArrowDownIcon,
+    MagnifyingGlassIcon,
+    ArrowUpIcon,
+    ChevronDownIcon,
 } from '@heroicons/react/24/solid'
 import {
     DocumentMagnifyingGlassIcon
 } from '@heroicons/react/24/outline'
 
 
-import AdminNav from "../../ui/admin/AdminNav"
 import { getCookie } from "../../utils/cookie"
 import AddDepModal from "../../ui/admin/department/AddDepModal"
-import blankAvt from "../../assets/img/blankAvt.png"
+import Pagination from "../../components/Pagination"
+
 import {
     addDepartment,
     getDeparments,
@@ -21,38 +24,10 @@ import {
 } from "../../utils/admin/departmentRequest"
 import DepDetailModal from "../../ui/admin/department/DepDetailModal"
 import UpdateDepartmentHeadModal from "../../ui/admin/department/UpdateDepartmentHeadModal"
-import { useNavigate } from "react-router-dom"
 import Switch from "../../components/Switch"
 import { refreshToken } from "../../utils/request"
 
 const Department = () => {
-
-    // Chuyển trang nếu không phải admin
-    const navigate = useNavigate()
-    const userRole = getCookie('role');
-    const role = 'ROLE_ADMIN'
-
-    useEffect(() => {
-        if (!userRole) {
-            return navigate('/')
-        }
-        const roleToURL = {
-            ROLE_USER: '/',
-            ROLE_ADMIN: '/admin',
-            ROLE_SUPERVISOR: '/supervisor',
-            ROLE_COUNSELLOR: '/counsellor',
-            ROLE_DEPARTMENT_HEAD: '/department-head',
-        };
-        if (roleToURL[role]) {
-            if (role === userRole) {
-                return;
-            }
-            navigate(roleToURL[role]);
-        } else {
-            console.error('Vai trò không hợp lệ:');
-        }
-    }, [])
-
     const [showAddDepModal, setShowAddDepModal] = useState(false)
     const [showDetailDepModal, setShowDetailDepModal] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -191,7 +166,6 @@ const Department = () => {
             {showUpdatDHModal && <UpdateDepartmentHeadModal cb={() => { setShowUpdatDHModal(false) }} id={id}></UpdateDepartmentHeadModal>}
             {showAddDepModal && <AddDepModal cb={() => { setShowAddDepModal(false) }} dataChange={handleAddDepartment}></AddDepModal>}
             {showDetailDepModal && <DepDetailModal cb={() => { setShowDetailDepModal(false) }} id={id} dataChange={handleUpdateDepartment}></DepDetailModal>}
-            <AdminNav avatarUrl={avatarUrl ? avatarUrl : blankAvt}></AdminNav>
             <div className="p-12">
                 <div className="flex justify-between w-full mb-5 items-center">
                     <h1 className="font-bold text-3xl">Phòng Ban</h1>
@@ -250,7 +224,7 @@ const Department = () => {
                                                 setShowDetailDepModal(true)
                                             }} />
                                         </td>
-                                        <td className="text-center min-h-full"><DocumentMagnifyingGlassIcon className={`w-6 h-6 cursor-pointer ${dep.status?'':'text-gray-600 cursor-auto'}`}
+                                        <td className="text-center min-h-full"><DocumentMagnifyingGlassIcon className={`w-6 h-6 cursor-pointer ${dep.status ? '' : 'text-gray-600 cursor-auto'}`}
                                             onClick={() => {
                                                 if (!dep.status) return
                                                 setId(dep.id)
@@ -263,21 +237,7 @@ const Department = () => {
                         </tbody>
                     </table>
                 </div>
-                <div className='flex justify-center items-center mt-3'>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${((totalPage <= 3 || page === 0) ? "hidden" : "")}`}
-                        onClick={() => { pageHandle('first') }}>
-                        <ChevronDoubleLeftIcon></ChevronDoubleLeftIcon>
-                    </button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${(page === 0) ? "hidden" : ""}`}
-                        onClick={() => { pageHandle('prev') }}>{page}</button>
-                    <button className='bg-[#C12C85] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#C12C85]/80'>{page + 1}</button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${(page === totalPage - 1) ? "hidden" : ""}`}
-                        onClick={() => { pageHandle('next') }}>{page + 2}</button>
-                    <button className={`bg-[#2CC168] p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-[#2CC168]/80 ${((totalPage <= 3 || page === totalPage - 1) ? "hidden" : "")}`}
-                        onClick={() => { pageHandle('final') }}>
-                        <ChevronDoubleRightIcon></ChevronDoubleRightIcon>
-                    </button>
-                </div>
+                <Pagination pageHandle={pageHandle} page={page} totalPage={totalPage}></Pagination>
             </div>
         </div>
     )
