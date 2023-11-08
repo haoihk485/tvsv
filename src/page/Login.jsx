@@ -71,7 +71,10 @@ const Login = () => {
                     document.cookie = `role=${response.data.role}`
                     if (authorizeRoles(response.data.role, 'ROLE_ADMIN')) {
                         navigate('/admin')
-                    } else { navigate('/') }
+                    } else if (authorizeRoles(response.data.role, 'ROLE_DEPARTMENT_HEAD')){
+                        navigate('/departmentHead')
+                    }
+                    else { navigate('/') }
 
                 } else {
                     addalertMessage("error", "Check your info again!!")

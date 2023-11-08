@@ -1,4 +1,4 @@
-import { ChevronDownIcon, Bars3Icon } from '@heroicons/react/24/solid'
+import { Bars3Icon } from '@heroicons/react/24/solid'
 import downArrow from '../../assets/svg/arrow_drop_down.svg'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +10,9 @@ const AdminNav = ({ avatarUrl }) => {
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
     const [showUserMenu, SetShowUserMenu] = useState(false)
+    const role = getCookie('role')
+    const roleText = role === 'ROLE_ADMIN' ? 'ADMIN' : role === 'ROLE_DEPARTMENT_HEAD' ? 'DEPARTMENT HEAD' : ''
+
     const showSideBar = () => {
         setIsShow(!isShow)
     }
@@ -52,26 +55,42 @@ const AdminNav = ({ avatarUrl }) => {
             {isShow &&
                 <div className={`fixed top-[56px] left-0 right-0 bottom-0`}>
                     <div className='flex w-full '>
-                        <div className='w-[30%] min-w-[500px] bg-blue-gray-50 min-h-screen opacity-100 border-r border-gray-300 flex flex-col items-center transition-transform duration-[2000ms] transform -translate-x-0'>
-                            <div className='text-[#898989] font-bold text-3xl my-5 cursor-pointer' onClick={() => { navigate('/admin/home') }}>ADMIN</div>
-                            <div className='border-t-2 border-gray-300 flex flex-col items-center w-full'>
-                                <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%] mt-5'
-                                    onClick={() => { navigate('/admin/departments') }}>Quản lý phòng ban</button>
-                                <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
-                                    onClick={() => { navigate('/admin/fields') }}>Quản lý lĩnh vực</button>
-                                <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
-                                    onClick={() => { navigate('/admin/users') }}>Quản lý người dùng</button>
+                        {(role === 'ROLE_ADMIN') &&
+                            <div className='w-[30%] min-w-[500px] bg-blue-gray-50 min-h-screen opacity-100 border-r border-gray-300 flex flex-col items-center transition-transform duration-[2000ms] transform -translate-x-0'>
+                                <div className='text-[#898989] font-bold text-3xl my-5 cursor-pointer' onClick={() => { navigate('/admin') }}>ADMIN</div>
+                                <div className='border-t-2 border-gray-300 flex flex-col items-center w-full'>
+                                    <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%] mt-5'
+                                        onClick={() => { navigate('/admin/departments') }}>Quản lý phòng ban</button>
+                                    <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
+                                        onClick={() => { navigate('/admin/fields') }}>Quản lý lĩnh vực</button>
+                                    <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
+                                        onClick={() => { navigate('/admin/users') }}>Quản lý người dùng</button>
+                                    <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
+                                        onClick={() => { console.log(getCookie('role')) }}>Role</button>
+                                </div>
+                            </div>
+                        }
+                        {(role === 'ROLE_DEPARTMENT_HEAD') &&
+                            <div className='w-[30%] min-w-[500px] bg-blue-gray-50 min-h-screen opacity-100 border-r border-gray-300 flex flex-col items-center transition-transform duration-[2000ms] transform -translate-x-0'>
+                                <div className='text-[#898989] font-bold text-3xl my-5 cursor-pointer' onClick={() => { navigate('/departmentHead') }}>Trưởng Phòng Ban</div>
+                                <div className='border-t-2 border-gray-300 flex flex-col items-center w-full'>
+                                    <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
+                                        onClick={() => { navigate('/departmentHead/counsellors') }}>Quản lý nhân sự</button>
+                                    <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
+                                        onClick={() => { navigate('/departmentHead/fields') }}> Quản lý lĩnh vực</button>
+                                    <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
+                                        onClick={() => { navigate('/departmentHead/questions') }}> Danh sách câu hỏi</button>
+                                <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'>Thống kê</button>
                                 <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
                                     onClick={() => { console.log(getCookie('role')) }}>Role</button>
-                                <button className='bg-[#2CC068] hover:bg-[#A4FFC9] hover:text-black text-white font-semibold px-4 py-1 rounded-xl my-2 min-w-[75%]'
-                                    onClick={() => { logoutHandle }}>Đăng xuất</button>
                             </div>
-                        </div>
-                        <div className='w-[70%]' onClick={() => { setIsShow(!isShow) }}></div>
-                    </div>
+                            </div>
+                        }
+                    <div className='w-[70%]' onClick={() => { setIsShow(!isShow) }}></div>
+                </div>
                 </div>
             }
-        </div>
+        </div >
 
     )
 }

@@ -9,6 +9,9 @@ import Field from './page/admin/Field'
 import Admin from './page/admin/Admin'
 import Test from './page/Test'
 import DepartmentHead from './page/departmentHead/DepartmentHead'
+import Counsellor from './page/departmentHead/Counsellor'
+import DepartmentField from './page/departmentHead/Field'
+import Question from './page/departmentHead/Question'
 function App() {
 
   return (
@@ -27,7 +30,10 @@ function App() {
           <Route path='home' element={<AdminHome />} />
         </Route>
         <Route path='/departmentHead' element={<DepartmentHead />}>
-          
+          <Route path='counsellors' element={<Counsellor />} />
+          <Route path='fields' element={<DepartmentField />} />
+          <Route path='questions' element={<Question />} />
+          <Route path='departments' element={<Department />} />
         </Route>
       </Routes>
     </>

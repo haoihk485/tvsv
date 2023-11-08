@@ -11,7 +11,6 @@ const Admin = () => {
     const navigate = useNavigate()
     const userRole = getCookie('role');
     const avatarUrl = getCookie('avatarUrl')
-    const role = 'ROLE_ADMIN'
 
     useEffect(() => {
         if (!userRole) {
@@ -20,16 +19,12 @@ const Admin = () => {
         const roleToURL = {
             ROLE_USER: '/',
             ROLE_ADMIN: '/admin/home',
+            ROLE_DEPARTMENT_HEAD: '/departmentHead',
             ROLE_SUPERVISOR: '/supervisor',
             ROLE_COUNSELLOR: '/counsellor',
-            ROLE_DEPARTMENT_HEAD: '/department-head',
         };
-        if (roleToURL[role]) {
-            if (role === userRole) {
-                navigate(roleToURL[role])
-                return;
-            }
-            navigate(roleToURL[role]);
+        if (roleToURL[userRole]) {
+            navigate(roleToURL[userRole])
         } else {
             console.error('Vai trò không hợp lệ:');
         }

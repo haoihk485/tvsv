@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { Outlet } from 'react-router-dom';
+
 import { getCookie } from '../../utils/cookie';
 import blankAvt from '../../assets/img/blankAvt.png'
+import DepNav from '../../ui/departmenthead/DepNav';
 import AdminNav from '../../ui/admin/AdminNav';
 
 const DepartmentHead = () => {
@@ -19,7 +23,7 @@ const DepartmentHead = () => {
             ROLE_ADMIN: '/admin/home',
             ROLE_SUPERVISOR: '/supervisor',
             ROLE_COUNSELLOR: '/counsellor',
-            ROLE_DEPARTMENT_HEAD: '/department-head',
+            ROLE_DEPARTMENT_HEAD: '/departmentHead',
         };
         if (roleToURL[role]) {
             navigate(roleToURL[role]);
