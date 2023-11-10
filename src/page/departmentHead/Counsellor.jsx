@@ -3,13 +3,13 @@ import { useState } from "react"
 import {
     PlusCircleIcon,
     MagnifyingGlassIcon,
-    PencilSquareIcon,
-    ChevronDoubleLeftIcon,
-    ChevronDoubleRightIcon,
     ArrowDownIcon,
     ArrowUpIcon,
-    BriefcaseIcon
 } from '@heroicons/react/24/solid'
+import {
+    BriefcaseIcon,
+
+} from '@heroicons/react/24/outline'
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 
@@ -24,10 +24,13 @@ import CoordinateModal from "../../ui/admin/user/CoordinateModal"
 import Pagination from "../../components/Pagination"
 import { AddDepCounsellor, getAllDepCounsellor, updateConsellorStatus } from "../../utils/departmentHead/counsellorRequest"
 import AddCounsellorModal from "../../ui/departmenthead/counsellor/AddCounsellorModal"
+import fieldEdit from "../../assets/img/fieldEdit.jpg"
+import AddCounsellorFieldModal from "../../ui/departmenthead/counsellor/AddCounsellorFieldModal"
 
 const Counsellor = () => {
 
     const [showAddCounsellorModal, setShowAddCounsellorModal] = useState(false)
+    const [showAddCounsellorFieldModal, setShowAddCounsellorFieldModal] = useState(false)
 
     const [isLoading, setIsLoading] = useState(false)
     const [dataTable, setDataTable] = useState([])
@@ -35,6 +38,8 @@ const Counsellor = () => {
     const [totalPage, setTotalPage] = useState(0)
     const [searchKey, setSearchKey] = useState('')
     const [sortType, setSortType] = useState('asc')
+
+    const [counsellorId, setCounsellorId] = useState('')
 
     useEffect(() => {
         getData(0)
@@ -135,12 +140,13 @@ const Counsellor = () => {
     return (
         <div>
             {showAddCounsellorModal && <AddCounsellorModal cb={() => setShowAddCounsellorModal(false)} dataChange={handleAddCounsellor}></AddCounsellorModal>}
+            {showAddCounsellorFieldModal && <AddCounsellorFieldModal cb={() => setShowAddCounsellorFieldModal(false)} id={counsellorId}></AddCounsellorFieldModal>}
             <div className="p-12">
                 <div className="flex justify-between w-full mb-5 items-center">
                     <h1 className="font-bold text-3xl">Nhân sự</h1>
                     <div>
                         <button className="bg-[#2CC168] rounded-full p-2 m-1 text-white" onClick={() => setShowAddCounsellorModal(true)}>
-                            <PlusCircleIcon className="w-6 h-6 text-white inline-block"></PlusCircleIcon>Thêm nhân sự</button>
+                            <PlusCircleIcon className="w-6 h-6 text-white inline-block"></PlusCircleIcon>Thêm tư vấn viên</button>
                     </div>
                 </div>
                 <div className="mb-3">
@@ -178,8 +184,8 @@ const Counsellor = () => {
                                 </th>
                                 <th className="w-[15%] text-left">Nghề nghiệp</th>
                                 <th className="w-[15%] text-left">ROLE</th>
-                                <th className="w-[5%] text-left">Status</th>
-                                <th className="w-[10%] text-left"></th>
+                                <th className="w-[10%] text-left">Status</th>
+                                <th className="w-[5%] text-left"></th>
                             </tr>
                         </thead>
                         <tbody className="">
@@ -199,7 +205,13 @@ const Counsellor = () => {
                                                     user.role === 'ROLE_DEPARTMENT_HEAD' ? 'Trưởng phòng ban' :
                                                         user.role === 'ROLE_COUNSELLOR' ? 'Tư vấn viên' : 'Người dùng'}</td>
                                             <td className="ml-1"><Switch id={user.id} active={user.enabled ? true : false} oC={handleUpdateStatus}></Switch></td>
-                                            <td><button className="bg-[#2CC168] rounded-full p-2 m-1 text-white">Lĩnh vực</button></td>
+                                            <td className="">
+                                                <BriefcaseIcon className="w-8 h-8 hover:opacity-50 cursor-pointer"
+                                                    onClick={()=>{
+                                                        setCounsellorId(user.id)
+                                                        setShowAddCounsellorFieldModal(true)}
+                                                        }></BriefcaseIcon>
+                                            </td>
                                         </tr>)
                                 })
                             }

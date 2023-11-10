@@ -1,9 +1,21 @@
+import { useEffect } from 'react'
 import avt from '../assets/img/lebong.jpg'
 import { BoltIcon } from '@heroicons/react/24/solid'
 
 
 
 const QuestionBox = ({ author, title, content, answer }) => {
+
+    useEffect(()=>{
+        handleContentCreate()
+    }, [])
+
+    const handleContentCreate = () =>{
+        console.log('work');
+        const ele = document.getElementById('content')
+        ele.innerHTML = content
+    }
+
     return (
         <div className=''>
             <div className='flex mb-5 p-5'>
@@ -13,7 +25,7 @@ const QuestionBox = ({ author, title, content, answer }) => {
                 <div className='ml-3 my-auto w-full'>
                     <h1 className='font-bold'>{author}</h1>
                     <h1 className='mt-3 mb-1 text-sm'><i></i><BoltIcon className='w-4 h-4 text-blue-500 inline-block'></BoltIcon>{title}</h1>
-                    <p className='mb-1 text-sm'>{content}</p>
+                    <p className='mb-1 text-sm' id='content'></p>
                     <button className='font-bold text-blue-800 mt-1 mb-3'>Xem câu trả lời ({answer})</button>
                     <div className='flex'>
                         <div className=''>
@@ -21,7 +33,7 @@ const QuestionBox = ({ author, title, content, answer }) => {
                         </div>
                         <div className='bg-gray-300 rounded-lg ml-2'>
                             <p className=' text-base m-2 font-semibold'>user name</p>
-                            <p className='text-sm m-2 '>adkoasodaopaopdosadijoasiojd</p>
+                            <p className='text-sm m-2 ' >adkoasodaopaopdosadijoasiojd</p>
                         </div>
                     </div>
 

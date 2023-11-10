@@ -25,7 +25,8 @@ const Home = () => {
 
     return (
         <div className='bg-[#E9ECEF] min-h-screen'>
-            <TextEditorModal show={showTextEditorModal} cb={()=>{setShowTextEditorModal(false)}}></TextEditorModal>
+            {showTextEditorModal && <TextEditorModal cb={()=>{setShowTextEditorModal(false)}}></TextEditorModal>}
+            
             <Navigation></Navigation>
             <div className="bg-black p-16 flex justify-between">
                 <div>
@@ -38,7 +39,7 @@ const Home = () => {
                 </div>
             </div>
             <div className='flex'>
-                <div className='w-[25%] p-2'>
+                <div className='w-[20%] p-2'>
                     <ul className='bg-white border rounded-lg overflow-hidden'>
                         <li className='font-bold border-b-2 p-1 text-lg text-center text-white bg-blue-700'>Câu hỏi theo khoa</li>
                         <li className='border-b text-sm p-3 hover:bg-gray-500 hover:text-white cursor-pointer'>Công nghệ thông tin</li>
@@ -53,7 +54,7 @@ const Home = () => {
                         <li className='border-b text-sm p-3 hover:bg-gray-500 hover:text-white cursor-pointer'>Công nghệ thông tin</li>
                     </ul>
                 </div>
-                <div className={`'w-[50%]'`}>
+                <div className={`w-[60%]`}>
                     <div className='my-2 bg-white mx-auto text-base p-2 rounded-lg text-[#6C7592] font-medium'>
                         <div className='h-full flex items-center'><QuestionMarkCircleIcon className='h-4 w-4 inline-block mr-1 my-auto'></QuestionMarkCircleIcon>Hỏi đáp</div>
                     </div>
@@ -89,7 +90,7 @@ const Home = () => {
                             content='Những câu đố vui, câu đố hài hước, đố mẹo cực hay nhưng không kém phần hại não, trí tuệ sẽ giúp các bạn kích thích trí não hoạt động nhanh nhạy, đồng thời có những phút giải trí xua tan đi những căng thẳng, mệt mỏi'
                             answer='3'></QuestionBox>
                         <QuestionBox author='user name' title='Tiêu Đề'
-                            content='Những câu đố vui, câu đố hài hước, đố mẹo cực hay nhưng không kém phần hại não, trí tuệ sẽ giúp các bạn kích thích trí não hoạt động nhanh nhạy, đồng thời có những phút giải trí xua tan đi những căng thẳng, mệt mỏi'
+                            content={'<p class="ql-align-center">Trần <strong>Nhật </strong><em><u>Hào </u></em><em class="ql-size-large"><u>To  </u> </em><em class="ql-size-large" style="color: rgb(255, 153, 0);">Cam</em></p>'}
                             answer='3'></QuestionBox>
                         <div className='w-full flex justify-center'>
                             <button className='bg-blue-500 p-1 text-white rounded-full min-w-[30px] ml-2 mb-3 hover:bg-blue-300'>prev</button>
@@ -100,7 +101,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-                <div className='w-[25%] p-2'>
+                <div className='w-[20%] p-2'>
                     
                 </div>
             </div>

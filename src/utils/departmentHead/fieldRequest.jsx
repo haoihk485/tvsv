@@ -30,8 +30,8 @@ export function getFieldDepNotHave() {
         .catch(error => console.log(error))
 }
 
-export function addDepField (ids) {
-    if(!Array.isArray(ids)) return
+export function addDepField(ids) {
+    if (!Array.isArray(ids)) return
     const url = 'https://student-consulting.onrender.com/api/department-head/fields'
     const data = {
         ids
@@ -43,7 +43,7 @@ export function addDepField (ids) {
             "Content-Type": "application/json",
             'Authorization': `Bearer ${getCookie('accessToken')}`
         },
-        body : JSON.stringify(data)
+        body: JSON.stringify(data)
     };
     return fetch(url, options)
         .then(response => response.json())
@@ -51,7 +51,7 @@ export function addDepField (ids) {
         .catch(error => console.log(error))
 }
 
-export function deleteDepField (id){
+export function deleteDepField(id) {
     const url = `https://student-consulting.onrender.com/api/department-head/fields/${id}`
     const options = {
         method: "DELETE",
@@ -59,6 +59,58 @@ export function deleteDepField (id){
             "Content-Type": "application/json",
             'Authorization': `Bearer ${getCookie('accessToken')}`
         },
+    };
+    return fetch(url, options)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+}
+
+export function getFieldCounsellerNotHave(id) {
+    const url = `https://student-consulting.onrender.com/api/department-head/fields/users/${id}`
+    const options = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${getCookie('accessToken')}`
+        },
+    };
+    return fetch(url, options)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+
+}
+
+export function addCounsellorField(id, ids) { //id của user và ids của những field
+    if (!Array.isArray(ids)) return
+    const url = `https://student-consulting.onrender.com/api/department-head/fields/users/${id}`
+    const data = {
+        ids
+    }
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${getCookie('accessToken')}`
+        },
+        body: JSON.stringify(data)
+    };
+    return fetch(url, options)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+}
+
+export function deleteCousellorField(userId, fieldId){
+    const url = `https://student-consulting.onrender.com/api/department-head/users/${userId}/fields/${fieldId}`
+    console.log(url);
+    const options = {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${getCookie('accessToken')}`
+        }
     };
     return fetch(url, options)
         .then(response => response.json())

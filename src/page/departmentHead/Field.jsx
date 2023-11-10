@@ -73,15 +73,15 @@ const DepartmentField = () => {
         }
     }
 
-    const handleDeleteDepField = async(id) =>{
-        if(isLoading) return
-        if(!(confirm('Bạn có chắc là muốn xóa lĩnh vực này?'))) return
+    const handleDeleteDepField = async (id) => {
+        if (isLoading) return
+        if (!(confirm('Bạn có chắc là muốn xóa lĩnh vực này?'))) return
         setIsLoading(true)
 
         try {
             await refreshToken()
             const response = await deleteDepField(id)
-            if(response.success){
+            if (response.success) {
                 alert(response.message)
                 getData(page)
             }
@@ -95,11 +95,11 @@ const DepartmentField = () => {
     const searchHandle = () => { }
     return (
         <div>
-            {showAddFieldModal && <AddFieldModal cb={()=>setShowAddFieldModal(false)}></AddFieldModal>}
+            {showAddFieldModal && <AddFieldModal cb={() => setShowAddFieldModal(false)} dataChange={getData}></AddFieldModal>}
             <div className="p-12">
                 <div className="flex justify-between w-full mb-5 items-center">
                     <h1 className="font-bold text-3xl">Lĩnh vực của phòng ban</h1>
-                    <button className="bg-[#2CC168] rounded-full p-2 m-1 text-white" onClick={()=>setShowAddFieldModal(true)}>
+                    <button className="bg-[#2CC168] rounded-full p-2 m-1 text-white" onClick={() => setShowAddFieldModal(true)}>
                         <PlusCircleIcon className="w-6 h-6 text-white inline-block"></PlusCircleIcon> Thêm lĩnh vực</button>
                 </div>
 
@@ -128,7 +128,7 @@ const DepartmentField = () => {
                                         <th className='border-r text-left pl-5 font-normal'>{field.name}</th>
                                         <th className='flex justify-center content-center'>
                                             <button className='bg-[#ff4545] w-[50px] flex justify-center rounded-3xl m-1'
-                                            onClick={()=>handleDeleteDepField(field.id)}><XMarkIcon className='h-6 w-6 text-white'></XMarkIcon></button>
+                                                onClick={() => handleDeleteDepField(field.id)}><XMarkIcon className='h-6 w-6 text-white'></XMarkIcon></button>
                                         </th>
                                     </tr>
                                 })

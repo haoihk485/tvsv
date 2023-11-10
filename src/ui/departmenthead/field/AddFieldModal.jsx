@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { refreshToken } from '../../../utils/request'
 import { addDepField, getFieldDepNotHave } from '../../../utils/departmentHead/fieldRequest'
 
-const AddFieldModal = ({ cb }) => {
+const AddFieldModal = ({ cb, dataChange }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [dataTable, setDataTable] = useState([])
     const [chooseTable, setChooseTable] = useState([])
@@ -59,7 +59,7 @@ const AddFieldModal = ({ cb }) => {
             const response = await addDepField(ids)
             if (response.success)
             {
-                getFieldData(0)
+                dataChange(0)
                 alert(response.message);
                 setChooseTable([])
             }

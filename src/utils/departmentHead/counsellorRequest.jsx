@@ -55,3 +55,19 @@ export function updateConsellorStatus(id) {
         .then(info => info)
         .catch(error => console.log(error))
 }
+
+export function getCounsellorById(id) {
+    const url = `https://student-consulting.onrender.com/api/department-head/users/${id}`
+    const options = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${getCookie('accessToken')}`
+        },
+    };
+    return fetch(url, options)
+        .then(response => response.json())
+        .then(info => info)
+        .catch(error => console.log(error))
+}
+

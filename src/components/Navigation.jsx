@@ -18,14 +18,12 @@ const Navigation = () => {
 
         try {
             const response = await logout()
-            if (response.success) {
-                deleteAllCookies();
-                navigate('/login')
-            }
+            deleteAllCookies();
+            navigate('/login')
         } catch (error) {
             console.log(error.message)
         }
-        finally{
+        finally {
             setIsLoading(false)
         }
     }
